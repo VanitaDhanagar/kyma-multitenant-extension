@@ -72,7 +72,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 		{
          withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.JenkinCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){		
 			    data = readJSON file: './config/manifest.json'		  
-				 = "${data.subaccounts[0].org_name}"
+				orgname = "${data.subaccounts[0].org_name}"
 				print orgname
 				spacename = "${data.subaccounts[0].space_name}"
 		         print spacename
