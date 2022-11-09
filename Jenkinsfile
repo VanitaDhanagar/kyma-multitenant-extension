@@ -111,10 +111,40 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 				print username
 				password = env.password
 				print password
-				build job: 'Kyma_Multitenant_UI_Factory', parameters: [[$class: 'StringParameterValue', name: 'URL', value: landscapeUrl],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'Subaccount', value: paramSub]]
+				//build job: 'Kyma_Multitenant_UI_Factory', parameters: [[$class: 'StringParameterValue', name: 'URL', value: landscapeUrl],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'Subaccount', value: paramSub]]
 			     
 		}
 		}
+		stage('cloudFoundryDeleteService')
+	{
+	withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.JenkinCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+      data = readJSON file: './config/manifest.json'
+	 paramOrg = "${data.subaccounts[0].org_name}"
+	print paramOrg
+					paramSpace = "${data.subaccounts[0].space_name}"
+					print paramSpace
+					region = "${data.subaccounts[0].region}"
+                             		print region					
+					endpoint = "https://api.cf.${region}.hana.ondemand.com"
+	 
+	cloudFoundryDeleteService(script: this, cfApiEndpoint: endpoint, cfOrg: paramOrg, cfSpace: paramSpace,cfServiceInstance: 'EasyFranchise-S4HANA',cfCredentialsId: env.JenkinCredentialID,,cfDeleteServiceKeys: true)
+
+
+	}
+		
+	}
+	stage ('Delete customer subaccount')
+	{
+		withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.JenkinCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+
+			  sh '''
+					  echo "************ delete provider subaccount ************************************** "
+					  echo "************************************************************************** " 
+						   cd scripts
+						   python3 delete_subaccount.py
+					'''
+	}
+	}
 		
 		
 		}
