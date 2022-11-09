@@ -19,15 +19,9 @@ def checkacc() {
 	
 }
 
-node ('CAT_10.237.114.208_Subordinate_1') 
+node ('master') 
 {
-withKubeConfig([credentialsId: 'kubeconfigkymabase']) 
-{
-             
-                        sh '''
-                          kubectl version
-						  sleep 1m
-						  '''
+
 dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, 'puserpwd':puserpwd], dockerImage: 'docker.wdf.sap.corp:51010/sfext:v3-py' )
 {
 	try {
@@ -35,11 +29,11 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 		stage ('Git-clone') 
 			{
 				cleanWs()
-          
+                checout scm
 				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
 				sh'''
 				git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
-				mv ./ReusableActions/* ./
+				mv ./kyma-multitenant-extension/* ./
 				git clone https://github.tools.sap/btp-ppu-test/ReusableActions.git --branch 'master'
 				mv ./ReusableActions/* ./
                 git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
@@ -136,5 +130,5 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 	}
 }
 } 
-}
+
 
