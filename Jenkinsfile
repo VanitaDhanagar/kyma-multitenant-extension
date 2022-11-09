@@ -34,7 +34,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 				sh'''
 				git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
 				mv ./kyma-multitenant-extension/* ./
-				git clone https://github.tools.sap/btp-ppu-test/ReusableActions.git --branch 'master'
+				git clone https://$USERNAME:$PASSWORD@github.tools.sap/btp-ppu-test/ReusableActions.git --branch 'master'
 				mv ./ReusableActions/* ./
                 git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
 				mv ./btp-kyma-multitenant-extension/* ./
