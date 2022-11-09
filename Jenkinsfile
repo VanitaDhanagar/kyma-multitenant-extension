@@ -72,14 +72,14 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 		{
          withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.JenkinCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){		
 			    data = readJSON file: './config/manifest.json'		  
-				orgname = "${data.subaccounts[0].org_name}"
+				 = "${data.subaccounts[0].org_name}"
 				print orgname
 				spacename = "${data.subaccounts[0].space_name}"
 		         print spacename
 				 
 				       
 			        
-			       sh "cf login -a https://api.cf.us20.hana.ondemand.com -u $USERNAME -p $PASSWORD -o cf-citykyma-93951304-9109-44bc-ac3f-53c3ac8b309b -s hana"
+			       sh "cf login -a https://api.cf.us20.hana.ondemand.com -u $USERNAME -p $PASSWORD -o $orgname -s $spacename"
 			
 			       sh '''
 		                pwd
