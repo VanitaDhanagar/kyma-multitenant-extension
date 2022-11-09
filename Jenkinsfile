@@ -86,7 +86,6 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 						curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 --output jq
 					    chmod +x jq
 					    mv jq /usr/local/bin/jq
-					    cd automatinscript
 						chmod +x ./OnPremiseDestination.sh
 						./OnPremiseDestination.sh
                         
