@@ -29,7 +29,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 		stage ('Git-clone') 
 			{
 				cleanWs()
-                checout scm
+                checkout scm
 				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
 				sh'''
 				git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
