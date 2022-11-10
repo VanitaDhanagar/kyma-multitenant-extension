@@ -1,0 +1,169 @@
+#!/usr/bin/env groovy
+@Library(['piper-lib', 'piper-lib-os','lmit-jenkins-lib']) _
+
+def checkacc() {
+	
+	withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.JenkinCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){	  
+				  sh '''
+				  echo "************ Check if Subaccount exists *********************************"
+				  echo "************************************************************************** " 
+					   pip3 install -r requirements.txt
+					   cd scripts
+					   python3 installations.py
+					   python3 subaccount_exists.py  
+				 '''
+				is_account_exists = readFile(file: 'myfile.txt')
+				print(is_account_exists)	
+				return is_account_exists
+	}
+	
+}
+
+node ('CAT_10.237.114.208_Subordinate_1') 
+{
+	 withKubeConfig([credentialsId: 'kubeconfigkymabase']) 
+{
+             
+                        sh '''
+                          kubectl version
+						  sleep 1m
+						  '''
+
+	dockerExecuteOnKubernetes(script: this, dockerImage: 'docker.wdf.sap.corp:51010/sfext:v3-py' )
+{
+
+	try {
+		 stage('Git-clone')
+			{
+				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
+{
+				deleteDir()
+
+				sh'''
+				git clone https://$USERNAME:$PASSWORD@github.tools.sap/btp-ppu-test/ReusableActions.git --branch 'master'
+				mv ./ReusableActions/* ./
+				
+				'''
+			}
+			}
+		 
+		   
+			
+			stage ('check_Subaccount_SetUpfrom_BTPAutomator') 
+			{
+				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.JenkinCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
+{
+				    writeJSON file: 'manifest.json', json: params.ManifestJsonFileContent
+							data1 = readJSON file:'manifest.json'
+							print(data1) 
+				    sh '''
+				    mv manifest.json ./config/
+				    '''
+				    is_account_exists = checkacc()
+				    print(is_account_exists)	
+
+				    if (is_account_exists == 'True') 
+					{
+
+					print("Subaccount already exists.")
+					
+				     } 
+            
+				       
+}
+
+				}	  
+			
+		
+		
+		
+	stage('Delete Kyma-instances and apps')
+	{
+		node ('CAT_10.237.114.208_Subordinate_1') 
+       {	
+                        sh '''
+                          kubectl version
+						  
+                          kubectl config view
+                          pwd
+						  chmod +x ./kyma-un-deployment.sh
+						  ./kyma-un-deployment.sh
+
+                        '''   
+              
+          }
+           
+          
+          
+		 }	
+	stage('cloudFoundryDeleteService')
+	{
+	withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.JenkinCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+      data = readJSON file: './config/manifest.json'
+	 paramOrg = "${data.subaccounts[0].org_name}"
+	               print paramOrg
+					paramSpace = "${data.subaccounts[0].space_name}"
+					print paramSpace
+					region = "${data.subaccounts[0].region}"
+                             		print region					
+					endpoint = "https://api.cf.${region}.hana.ondemand.com"
+	 
+	cloudFoundryDeleteService(script: this, cfApiEndpoint: endpoint, cfOrg: paramOrg, cfSpace: paramSpace,cfServiceInstance: 'EasyFranchiseHANADB',cfCredentialsId: env.JenkinCredentialID)
+
+
+	}
+		
+	}
+	stage('Delete kyma-env')
+	{
+		withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.JenkinCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+         data = readJSON file: './config/manifest.json'		  
+		 subdomain = "${data.global_logon.subdomain}"
+		 print subdomain
+		subaccount_subdomain = "${data.subaccounts[0].subdomain_subaccount}"
+		print subaccount_subdomain
+		btplandscape=params.btpLandscape
+		print btplandscape
+
+		
+		region = "${data.subaccounts[0].region}"
+						
+				deleteKymaEnvironment(
+							btpCredentialsId: env.JenkinCredentialID,
+							btpGlobalAccountId:subdomain,
+							btpSubdomainName: subaccount_subdomain,
+							btpRegion:'us20',
+							btpLandscape:'factory',
+							kymaDisplayName:'kyma-base-mission-automation-93951304-9109-44bc-ac3f-53c3ac8_kyma'
+						)
+	
+
+	}
+		
+	}
+	
+	
+	}	 
+	catch(e){
+		echo e.toString()
+		echo 'This will run only if failed'
+		currentBuild.result = "FAILURE"
+	}
+	finally {
+		emailext body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: 'vanita.dhanagar@sap.com'
+	}
+
+}
+}
+}
+
+
+
+
+
+
+
+
+
+
+		 
