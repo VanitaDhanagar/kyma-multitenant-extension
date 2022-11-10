@@ -68,31 +68,31 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 				}
 				  
 			}
-		stage ("create_customer_destination")
-		{
-         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.JenkinCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){		
-			    data = readJSON file: './config/manifest.json'		  
-				orgname = "${data.subaccounts[0].org_name}"
-				print orgname
-				spacename = "${data.subaccounts[0].space_name}"
-		         print spacename
+		// stage ("create_customer_destination")
+		// {
+        //  withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.JenkinCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){		
+		// 	    data = readJSON file: './config/manifest.json'		  
+		// 		orgname = "${data.subaccounts[0].org_name}"
+		// 		print orgname
+		// 		spacename = "${data.subaccounts[0].space_name}"
+		//          print spacename
 				 
 				       
 			        
-			       sh "cf login -a https://api.cf.us20.hana.ondemand.com -u $USERNAME -p $PASSWORD -o $orgname -s $spacename"
+		// 	       sh "cf login -a https://api.cf.us20.hana.ondemand.com -u $USERNAME -p $PASSWORD -o $orgname -s $spacename"
 			
-			       sh '''
-		                pwd
-						curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 --output jq
-					    chmod +x jq
-					    mv jq /usr/local/bin/jq
-						chmod +x ./OnPremiseDestination.sh
-						./OnPremiseDestination.sh
+		// 	       sh '''
+		//                 pwd
+		// 				curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 --output jq
+		// 			    chmod +x jq
+		// 			    mv jq /usr/local/bin/jq
+		// 				chmod +x ./OnPremiseDestination.sh
+		// 				./OnPremiseDestination.sh
                         
 						
-				    '''	
-		 }
-		}
+		// 		    '''	
+		//  }
+		// }
 		
 		stage('UI_Test_Execution')
 		{
