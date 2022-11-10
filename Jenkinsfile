@@ -55,6 +55,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 							print(data1) 
 				    sh '''
 				    mv manifest.json ./config/
+					env
 				    '''
 				    is_account_exists = checkacc()
 				    print(is_account_exists)	
