@@ -75,6 +75,10 @@ node ('master')
 	{
         node ('CAT_10.237.114.208_Subordinate_1') 
 {
+    deleteDir()
+
+              withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
+              {
 
          withKubeConfig([credentialsId: 'kubeconfigkymabase']) 
 {
@@ -94,6 +98,7 @@ node ('master')
           
 }
 }  
+}
           
 		 }	
 	stage('cloudFoundryDeleteService')
