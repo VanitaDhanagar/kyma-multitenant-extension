@@ -21,13 +21,7 @@ def checkacc() {
 
 node ('CAT_10.237.114.208_Subordinate_1') 
 {
-	 withKubeConfig([credentialsId: 'kubeconfigkymabase']) 
-{
-             
-                        sh '''
-                          kubectl version
-						  sleep 1m
-						  '''
+	
 
 	dockerExecuteOnKubernetes(script: this, dockerImage: 'docker.wdf.sap.corp:51010/sfext:v3-py' )
 {
@@ -80,10 +74,12 @@ node ('CAT_10.237.114.208_Subordinate_1')
 		
 	stage('Delete Kyma-instances and apps')
 	{
+         withKubeConfig([credentialsId: 'kubeconfigkymabase']) 
+{
 			
                         sh '''
                           kubectl version
-						  
+						   sleep 1m
                           kubectl config view
                           pwd
 						  chmod +x ./kyma-un-deployment.sh
@@ -92,7 +88,7 @@ node ('CAT_10.237.114.208_Subordinate_1')
                         '''   
               
           
-           
+}
           
           
 		 }	
@@ -155,7 +151,7 @@ node ('CAT_10.237.114.208_Subordinate_1')
 
 }
 }
-}
+
 
 
 
