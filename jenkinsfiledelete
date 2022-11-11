@@ -42,7 +42,8 @@ node ('CAT_10.237.114.208_Subordinate_1')
 				sh'''
 				git clone https://$USERNAME:$PASSWORD@github.tools.sap/btp-ppu-test/ReusableActions.git --branch 'master'
 				mv ./ReusableActions/* ./
-				
+				git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
+				mv ./kyma-multitenant-extension/* ./
 				'''
 			}
 			}
