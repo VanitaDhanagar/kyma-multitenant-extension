@@ -80,8 +80,7 @@ node ('CAT_10.237.114.208_Subordinate_1')
 		
 	stage('Delete Kyma-instances and apps')
 	{
-		node ('CAT_10.237.114.208_Subordinate_1') 
-       {	
+			
                         sh '''
                           kubectl version
 						  
@@ -92,7 +91,7 @@ node ('CAT_10.237.114.208_Subordinate_1')
 
                         '''   
               
-          }
+          
            
           
           
