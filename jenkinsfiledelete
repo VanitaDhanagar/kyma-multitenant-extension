@@ -75,8 +75,7 @@ node ('master')
 	{
         node ('windowskymanode') 
 {
-    deleteDir()
-
+    
               withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
               {
 
