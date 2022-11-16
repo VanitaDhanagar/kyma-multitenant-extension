@@ -3,7 +3,7 @@
 
 def checkacc() {
 	
-	withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.JenkinCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){	  
+	withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){	  
 				  sh '''
 				  echo "************ Check if Subaccount exists *********************************"
 				  echo "************************************************************************** " 
@@ -48,7 +48,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 			{
 				
 				
-				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.JenkinCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
            
 				    writeJSON file: 'manifest.json', json: params.ManifestJsonFileContent
 							data1 = readJSON file:'manifest.json'
@@ -71,7 +71,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 			}
 		stage ("create_customer_destination")
 		{
-         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.JenkinCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){		
+         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){		
 			    data = readJSON file: './config/manifest.json'		  
 				orgname = "${data.subaccounts[0].org_name}"
 				print orgname
@@ -97,7 +97,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 		
 		stage('UI_Test_Execution')
 		{
-			withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.JenkinCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){		
+			withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){		
 				//filepath = "C://Jenkins//workspace//${JOB_NAME}//userlist.xlsx"	  
 			    data = readJSON file: './config/manifest.json'		  
 				paramSub = "${data.subaccounts[0].display_name}"
@@ -113,13 +113,13 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 				print username
 				password = env.password
 				print password
-				//build job: 'Kyma_Multitenant_UI_Factory', parameters: [[$class: 'StringParameterValue', name: 'URL', value: landscapeUrl],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'Subaccount', value: paramSub]]
+				build job: 'Kyma_Multitenant_UI_Factory', parameters: [[$class: 'StringParameterValue', name: 'URL', value: landscapeUrl],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'Subaccount', value: paramSub]]
 
 		}
 		}
-stage('cloudFoundryDeleteService')
+		stage('cloudFoundryDeleteService')
 	{
-	withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.JenkinCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+	withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
       data = readJSON file: './config/manifest.json'
 	 paramOrg = "${data.subaccounts[0].org_name}"
 	print paramOrg
@@ -129,7 +129,7 @@ stage('cloudFoundryDeleteService')
                              		print region					
 					endpoint = "https://api.cf.${region}.hana.ondemand.com"
 	 
-	cloudFoundryDeleteService(script: this, cfApiEndpoint: endpoint, cfOrg: paramOrg, cfSpace: paramSpace,cfServiceInstance: 'EasyFranchise-S4HANA',cfCredentialsId: env.JenkinCredentialID,,cfDeleteServiceKeys: true)
+	cloudFoundryDeleteService(script: this, cfApiEndpoint: endpoint, cfOrg: paramOrg, cfSpace: paramSpace,cfServiceInstance: 'EasyFranchise-S4HANA',cfCredentialsId: env.BTPCredentialID,,cfDeleteServiceKeys: true)
 
 
 	}
@@ -137,7 +137,7 @@ stage('cloudFoundryDeleteService')
 	}
 	stage ('Delete customer subaccount')
 	{
-		withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.JenkinCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+		withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
 
 			  sh '''
 					  echo "************ delete provider subaccount ************************************** "
