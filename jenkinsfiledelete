@@ -136,14 +136,14 @@ node ('master')
 		
 		region = "${data.subaccounts[0].region}"
 						
-				deleteKymaEnvironment(
-							btpCredentialsId: env.BTPCredentialID,
-							btpGlobalAccountId:subdomain,
-							btpSubdomainName: subaccount_subdomain,
-							btpRegion:'us20',
-							btpLandscape:'factory',
-							kymaDisplayName:'kyma-base-mission-automation-93951304-9109-44bc-ac3f-53c3ac8_kyma'
-						)
+				// deleteKymaEnvironment(
+				// 			btpCredentialsId: env.BTPCredentialID,
+				// 			btpGlobalAccountId:subdomain,
+				// 			btpSubdomainName: subaccount_subdomain,
+				// 			btpRegion:'us20',
+				// 			btpLandscape:'factory',
+				// 			kymaDisplayName:'kyma-base-mission-automation-93951304-9109-44bc-ac3f-53c3ac8_kyma'
+				// 		)
 	
 
 	}
