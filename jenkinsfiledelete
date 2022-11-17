@@ -116,7 +116,7 @@ node ('master')
                              		print region					
 					endpoint = "https://api.cf.${region}.hana.ondemand.com"
 	 
-	cloudFoundryDeleteService(script: this, cfApiEndpoint: endpoint, cfOrg: paramOrg, cfSpace: paramSpace,cfServiceInstance: 'EasyFranchiseHANADB',cfCredentialsId: env.BTPCredentialID)
+	//cloudFoundryDeleteService(script: this, cfApiEndpoint: endpoint, cfOrg: paramOrg, cfSpace: paramSpace,cfServiceInstance: 'EasyFranchiseHANADB',cfCredentialsId: env.BTPCredentialID)
 
 
 	}
