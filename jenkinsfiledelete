@@ -82,6 +82,7 @@ node ('master')
 
          withKubeConfig([credentialsId: 'kubeconfigkymabase']) 
 {
+	          build job: 'Login_to_KymaDashboard'
 			
                         sh '''
                         git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
