@@ -86,6 +86,8 @@ node ('master')
                         sh '''
                         git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
 				mv ./kyma-multitenant-extension/* ./
+				git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
+				mv ./btp-kyma-multitenant-extension/* ./
                           kubectl version
 						   sleep 1m
                           kubectl config view
