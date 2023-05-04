@@ -62,11 +62,11 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 
 					print("Subaccount already exists.")
 
-					// sh '''
-					// chmod +x ./code/setup/btp-setup-automator/btpsa-deployment.sh
-					// ./code/setup/btp-setup-automator/btpsa-deployment.sh
+					sh '''
+					chmod +x ./code/setup/btp-setup-automator/btpsa-deployment.sh
+					./code/setup/btp-setup-automator/btpsa-deployment.sh
 
-					// '''				
+					'''				
 				     }
 
 				}
