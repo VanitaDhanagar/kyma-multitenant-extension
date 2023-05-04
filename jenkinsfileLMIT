@@ -70,7 +70,9 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 			}
 			stage('deployment')
 	{
-			
+		node ('windowskymanode') 
+       {	
+		 deleteDir()
 
               withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
               {
@@ -79,14 +81,15 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
              
  
                         sh '''
-						 
+						 git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
+				         mv ./kyma-multitenant-extension/* ./
+						 git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
+				         mv ./btp-kyma-multitenant-extension/* ./
                           kubectl version
 						  
                           kubectl config view
                           pwd
-						  curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 --output jq
-					    chmod +x jq
-					    mv jq /usr/local/bin/jq
+						
 						 
 					chmod +x ./code/setup/btp-setup-automator/btpsa-deployment.sh
 					./code/setup/btp-setup-automator/btpsa-deployment.sh
@@ -98,7 +101,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
           }
            
 	   }
-	   
+	   }
 		 }
 		
 		stage ("create_customer_destination")
