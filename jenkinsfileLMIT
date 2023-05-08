@@ -87,7 +87,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 				         mv ./btp-kyma-multitenant-extension/* ./
                          curl -L  https://github.com/stedolan/jq/releases/latest/download/jq-win64.exe --output jq
 					     chmod +x jq
-						 mv jq C:/Program Files/Git/bin/jq
+						 mv jq C://Program Files//Git/bin/jq
 
 						kubectl version
 						  
