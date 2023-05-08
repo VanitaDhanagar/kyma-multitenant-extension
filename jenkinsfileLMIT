@@ -70,9 +70,8 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 			}
 			stage('deployment')
 	{
-		node ('windowskymanode') 
+		node ('master') 
        {	
-		 deleteDir()
 
               withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
               {
@@ -81,10 +80,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
              
  
                         sh '''
-						 git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
-				         mv ./kyma-multitenant-extension/* ./
-						 git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
-				         mv ./btp-kyma-multitenant-extension/* ./
+						
                           kubectl version
 						  
                           kubectl config view
