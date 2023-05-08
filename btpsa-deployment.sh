@@ -36,6 +36,7 @@ function parse_yaml {
 }
 
 read_automator_config() {  
+  result=$(jq '.' /metadata_log.json)
   SUBDOMAIN=$(jq -r '."subdomain"' <<< "${result}")
   KUBECONFIG_URL=$(jq -r '."kymaKubeConfigUrl"' <<< "${result}")
   DB_ADMIN="DBADMIN"
@@ -56,7 +57,7 @@ echo "##########################################################################
 echo "# Step 1 - Summary of Application Environment"
 echo "####################################################################################################"
 echo ""
-
+read_automator_config
 
 # Summary Step 1
 echo
