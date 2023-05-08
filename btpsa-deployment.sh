@@ -130,7 +130,7 @@ echo ""
   PROJECT=broker
   BTPSA_KYMA_IMAGE_NAME_BROKER=ghcr.io/sap-samples/btp-kyma-multitenant-extension-broker:main
   log "Step 2.9 - Deploy $PROJECT"
-  cat "./$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_BROKER~g" | kubectl apply -f -
+  cat "./code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_BROKER~g" | kubectl apply -f -
 
   PROJECT=email-service
   BTPSA_KYMA_IMAGE_NAME_EMAIL_SERVICE=ghcr.io/sap-samples/btp-kyma-multitenant-extension-email-service:main
