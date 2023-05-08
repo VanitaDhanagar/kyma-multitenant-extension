@@ -87,12 +87,9 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 				         mv ./btp-kyma-multitenant-extension/* ./
 						 choco install jq
 						 result=$(jq '.' metadata_log.json)
-						 SUBDOMAIN=$(jq -r '."subdomain"' <<< "${result}")
-						 echo $SUBDOMAIN
-						 kubectl version
 						  
                           kubectl config view
-                          pwd
+                          
 						
                     ./btpsa-deployment.sh		
 
