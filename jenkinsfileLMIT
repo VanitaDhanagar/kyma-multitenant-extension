@@ -86,14 +86,16 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 						 git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
 				         mv ./btp-kyma-multitenant-extension/* ./
                          curl -L -o C/Program Files/Git/usr/bin/jq-win64.exe  https://github.com/stedolan/jq/releases/latest/download/jq-win64.exe
-						kubectl version
+						 result=$(jq '.' metadata_log.json)
+						 SUBDOMAIN=$(jq -r '."subdomain"' <<< "${result}")
+						 echo $SUBDOMAIN
+						 kubectl version
 						  
                           kubectl config view
                           pwd
 						
 						 
-					chmod +x ./code/setup/btp-setup-automator/btpsa-deployment.sh
-					./code/setup/btp-setup-automator/btpsa-deployment.sh
+					
 
 							
 
