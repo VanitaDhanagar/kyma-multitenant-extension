@@ -88,7 +88,21 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 						 choco install jq
 						 result=$(jq '.' metadata_log.json)
 						 SUBDOMAIN=$(jq -r '."subdomain"' <<< "${result}")
-						 echo $SUBDOMAIN
+						 echo $result
+						  SUBDOMAIN=$(jq -r '."subdomain"' <<< "${result}")
+  KUBECONFIG_URL=$(jq -r '."kymaKubeConfigUrl"' <<< "${result}")
+  DB_ADMIN="DBADMIN"
+  DB_ADMIN_PASSWORD="$( echo "$result" | jq -r '.createdServiceInstances[] | select(.name == "hana-cloud") | .parameters.data.systempassword' 2> /dev/null)"
+  
+  DB_DASHBOARD="$( echo "$result" | jq -r '.createdServiceInstances[] | select(.name == "hana-cloud") | .statusResponse | ."dashboard_url" ' 2> /dev/null)"  
+  DB_HOST="${DB_DASHBOARD#*?host=}"
+  DB_HOST=${DB_HOST/&component*}
+  DB_PORT=${DB_DASHBOARD/*port=/}
+  DB_SQLENDPOINT="$DB_HOST:$DB_PORT"
+
+  kubectl config view > temp.yaml
+  eval $(parse_yaml temp.yaml "KUBE_")
+  CLUSTER_DOMAIN="${KUBE_clusters__server#*//api.}"
 						 kubectl version
 						  
                           kubectl config view
