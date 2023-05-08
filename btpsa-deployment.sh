@@ -36,7 +36,7 @@ function parse_yaml {
 }
 
 read_automator_config() {  
-  result=$(jq '.' C/Program Files/Git/usr/bin/metadata_log.json)
+  result=$(jq  C/Program Files/Git/usr/bin/metadata_log.json)
   SUBDOMAIN=$(jq -r '."subdomain"' <<< "${result}")
   KUBECONFIG_URL=$(jq -r '."kymaKubeConfigUrl"' <<< "${result}")
   DB_ADMIN="DBADMIN"
