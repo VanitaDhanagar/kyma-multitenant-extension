@@ -93,6 +93,8 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 						  
                           kubectl config view
                           pwd
+						  chmod +x ./code/setup/btp-setup-automator/btpsa-deployment.sh
+                          ./code/setup/btp-setup-automator/btpsa-deployment.sh
 						
 						 
 					
