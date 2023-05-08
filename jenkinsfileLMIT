@@ -86,7 +86,6 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 						 git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
 				         mv ./btp-kyma-multitenant-extension/* ./
 						 choco install jq
-						 result=$(jq '.' metadata_log.json)
 						  
                           kubectl config view
                           

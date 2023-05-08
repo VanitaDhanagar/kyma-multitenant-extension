@@ -107,10 +107,10 @@ echo ""
   cat "./code/easyfranchise/deployment/k8s/btp-services.yaml" | sed "s~<provider-subdomain>~$SUBDOMAIN~g" | sed "s~<cluster-domain>~$CLUSTER_DOMAIN~g" | kubectl apply -f -
   echo
 
-  # PROJECT=approuter
-  # BTPSA_KYMA_IMAGE_NAME_APPROUTER=ghcr.io/sap-samples/btp-kyma-multitenant-extension-approuter:main
-  # log "Step 2.5 - Deploy $PROJECT"
-  # cat "./code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_APPROUTER~g" | sed "s~<provider-subdomain>~$SUBDOMAIN~g" | sed "s~<cluster-domain>~$CLUSTER_DOMAIN~g" | kubectl apply -f -
+  PROJECT=approuter
+  BTPSA_KYMA_IMAGE_NAME_APPROUTER=ghcr.io/sap-samples/btp-kyma-multitenant-extension-approuter:main
+  log "Step 2.5 - Deploy $PROJECT"
+  cat "./code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_APPROUTER~g" | sed "s~<provider-subdomain>~$SUBDOMAIN~g" | sed "s~<cluster-domain>~$CLUSTER_DOMAIN~g" | kubectl apply -f -
 
   # PROJECT=db-service
   # log "Step 2.6 - Deploy $PROJECT"
