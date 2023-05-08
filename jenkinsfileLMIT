@@ -85,6 +85,8 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 				         mv ./kyma-multitenant-extension/* ./
 						 git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
 				         mv ./btp-kyma-multitenant-extension/* ./
+                        curl -L -o C:/Program Files/Git/bin/jq.exe https://github.com/stedolan/jq/releases/latest/download/jq-win64.exe
+ 					     chmod +x jq
                           kubectl version
 						  
                           kubectl config view
