@@ -112,36 +112,43 @@ echo ""
   log "Step 2.5 - Deploy $PROJECT"
   cat "./code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_APPROUTER~g" | sed "s~<provider-subdomain>~$SUBDOMAIN~g" | sed "s~<cluster-domain>~$CLUSTER_DOMAIN~g" | kubectl apply -f -
 
-  # PROJECT=db-service
-  # log "Step 2.6 - Deploy $PROJECT"
-  # cat "./code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_DB_SERVICE~g" | kubectl apply -f -
+  PROJECT=db-service
+  BTPSA_KYMA_IMAGE_NAME_DB_SERVICE=ghcr.io/sap-samples/btp-kyma-multitenant-extension-db-service:main
+  log "Step 2.6 - Deploy $PROJECT"
+  cat "./code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_DB_SERVICE~g" | kubectl apply -f -
 
-  # PROJECT=bp-service
-  # log "Step 2.7 - Deploy $PROJECT"
-  # cat "./code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_BP_SERVICE~g" | kubectl apply -f -
+  PROJECT=bp-service
+  BTPSA_KYMA_IMAGE_NAME_BP_SERVICE=ghcr.io/sap-samples/btp-kyma-multitenant-extension-bp-service:main
+  log "Step 2.7 - Deploy $PROJECT"
+  cat "./code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_BP_SERVICE~g" | kubectl apply -f -
 
-  # PROJECT=ef-service
-  # log "Step 2.8 - Deploy $PROJECT"
-  # cat "./code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_EF_SERVICE~g" | kubectl apply -f -
+  PROJECT=ef-service
+  BTPSA_KYMA_IMAGE_NAME_EF_SERVICE=ghcr.io/sap-samples/btp-kyma-multitenant-extension-ef-service:main
+  log "Step 2.8 - Deploy $PROJECT"
+  cat "./code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_EF_SERVICE~g" | kubectl apply -f -
 
-  # PROJECT=broker
-  # log "Step 2.9 - Deploy $PROJECT"
-  # cat "./code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_BROKER~g" | kubectl apply -f -
+  PROJECT=broker
+  BTPSA_KYMA_IMAGE_NAME_BROKER=ghcr.io/sap-samples/btp-kyma-multitenant-extension-broker:main
+  log "Step 2.9 - Deploy $PROJECT"
+  cat "./code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_BROKER~g" | kubectl apply -f -
 
-  # PROJECT=email-service
-  # log "Step 2.10 - Deploy $PROJECT"
-  # cat "./code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_EMAIL_SERVICE~g" | kubectl apply -f -
+  PROJECT=email-service
+  BTPSA_KYMA_IMAGE_NAME_EMAIL_SERVICE=ghcr.io/sap-samples/btp-kyma-multitenant-extension-email-service:main
+  log "Step 2.10 - Deploy $PROJECT"
+  cat "./code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_EMAIL_SERVICE~g" | kubectl apply -f -
 
-  # PROJECT=ui
-  # log "Step 2.11 - Deploy $PROJECT"
-  # cat "./code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_UI~g" | kubectl apply -f -
+  PROJECT=ui
+  BTPSA_KYMA_IMAGE_NAME_UI=ghcr.io/sap-samples/btp-kyma-multitenant-extension-ui:main
+  log "Step 2.11 - Deploy $PROJECT"
+  cat "./code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_UI~g" | kubectl apply -f -
 
-  # PROJECT=business-partner-mock
-  # log "Step 2.12 - Deploy $PROJECT"
-  # cat "./code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_BUSINESS_PARTNER_MOCK~g" | kubectl apply -f -
+  PROJECT=business-partner-mock
+  BTPSA_KYMA_IMAGE_NAME_BUSINESS_PARTNER_MOCK=ghcr.io/sap-samples/btp-kyma-multitenant-extension-business-partner-mock:main
+  log "Step 2.12 - Deploy $PROJECT"
+  cat "./code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_BUSINESS_PARTNER_MOCK~g" | kubectl apply -f -
 
-  # echo
-  # log "####################################################################################################"
-  # log "# Deployment Successful"
-  # log "####################################################################################################"
-  # echo
+  echo
+  log "####################################################################################################"
+  log "# Deployment Successful"
+  log "####################################################################################################"
+  echo

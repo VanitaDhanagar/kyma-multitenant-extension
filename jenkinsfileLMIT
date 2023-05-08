@@ -88,8 +88,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 						 choco install jq
 						  
                           kubectl config view
-                          
-						
+
                     ./btpsa-deployment.sh		
 
 							
