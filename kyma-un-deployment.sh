@@ -20,14 +20,14 @@
   kubectl -n mock delete -f code/easyfranchise/deployment/k8s/business-partner-mock.yaml || true
   kubectl -n integration delete -f code/easyfranchise/deployment/k8s/email-service.yaml || true
   
-  echo "Step 1.5 Un-deploy day2-approuter"  
-  helm delete day2-approuter --namespace day2-operations || true
+  # echo "Step 1.5 Un-deploy day2-approuter"  
+  # helm delete day2-approuter --namespace day2-operations || true
 
-  echo "Step 1.6 Un-deploy day2-service"  
-  helm delete day2-service --namespace day2-operations || true
+  # echo "Step 1.6 Un-deploy day2-service"  
+  # helm delete day2-service --namespace day2-operations || true
 
-  echo "Step 1.7 Un-deploy day2-ui"  
-  helm delete day2-ui --namespace day2-operations || true
+  # echo "Step 1.7 Un-deploy day2-ui"  
+  # helm delete day2-ui --namespace day2-operations || true
 
   echo "######################################################################################################"
   echo "# Step 2 - Deelete all service instances (xsuaa, saas-registry and destination) and subscription APIRule"
@@ -59,20 +59,20 @@
   kubectl -n integration delete serviceinstances xsuaa-service || true
 
   
-  echo "Step 3.1 delete namespace backend"  
-  kubectl delete namespace backend || true
+#   echo "Step 3.1 delete namespace backend"  
+#   kubectl delete namespace backend || true
 
-  echo "Step 3.2 delete namespace day2-operations"  
-  kubectl delete namespace day2-operations || true
+#   echo "Step 3.2 delete namespace day2-operations"  
+#   kubectl delete namespace day2-operations || true
 
-  echo "Step 3.3 delete namespace frontend"  
- kubectl delete namespace frontend || true
+#   echo "Step 3.3 delete namespace frontend"  
+#  kubectl delete namespace frontend || true
 
-  echo "Step 3.4 delete namespace integration"  
-  kubectl delete namespace integration || true
+#   echo "Step 3.4 delete namespace integration"  
+#   kubectl delete namespace integration || true
   
-  echo "Step 3.5 delete namespace  mock"  
-  kubectl delete namespace  mock || true
+#   echo "Step 3.5 delete namespace  mock"  
+#   kubectl delete namespace  mock || true
 
   
   echo

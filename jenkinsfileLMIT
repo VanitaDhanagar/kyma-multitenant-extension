@@ -70,25 +70,15 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 				}
 				  
 			}
-			stage('deployment')
+stage('deployment')
 	{
 	withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
               {
-                 sh '''
-					
-						 choco install jq
-						  
-                          kubectl config view
-
+                 sh '''						  
+                     kubectl config view
                     ./btpsa-deployment.sh		
-
-							
-
-                        '''   
-              
-          
-           
-	   }
+                  '''   
+             }
 	   
 		 }
 		
