@@ -70,31 +70,52 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 			}
 			stage('Application deployment')
 	{
-// 		node ('windowskymanode') 
-//        {	
+		node ('windowskymanode') 
+       {	
 
-//               withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
-//               {
-// 		withKubeConfig([credentialsId: 'kubeconfiglmit']) 
-// {
+              withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
+              {
+		withKubeConfig([credentialsId: 'kubeconfiglmit']) 
+{
              
  
-//                         sh '''
-// 						 git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
-// 				         mv ./kyma-multitenant-extension/* ./
-// 						 git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
-// 				         mv ./btp-kyma-multitenant-extension/* ./
-// 						 choco install jq					  
-//                         kubectl config view 	
-//                         ./btpsa-deployment.sh
-//                         '''   
+                        sh '''
+						 git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
+				         mv ./kyma-multitenant-extension/* ./
+						 git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
+				         mv ./btp-kyma-multitenant-extension/* ./
+						 choco install jq					  
+                        kubectl config view 	
+                        ./btpsa-deployment.sh
+                        '''   
               
-//           }
+          }
            
-// 	   }
-// 	   }
+	   }
+	   }
 		 }
-		
+		stage('Subscribe Application')
+		{
+			   withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+				try{
+                  subscribeToSaaS(
+                    script: this,
+                    btpCredentialsId: env.BTPCredentialID,
+                    btpGlobalAccountId: '2a979d83-c576-4ff8-a281-8bb45bc5480d',
+                    saasApplicationName: 'easyfranchise-kymacrossconsumption-e530d087',
+					btpLandscape: 'canary',
+                    btpRegion: 'eu10-canary',
+                    saasSubscribtionPlan: "",
+                    btpSubdomainName: 'cityscooter-bzxa8vyuws'
+                  )
+                }
+                catch(Exception e){
+                  sleep 60;
+                }
+
+
+		}
+		}
 		stage('UI_Test_Execution')
 		{
 		// 	withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){		
@@ -118,57 +139,57 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 		stage('Unsubscribe Application')
 		{	
 
-          withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
-				try{
-                  unsubscribeFromSaaS(
-                    script: this,
-                    btpCredentialsId: env.BTPCredentialID,
-                    btpGlobalAccountId: '2a979d83-c576-4ff8-a281-8bb45bc5480d',
-                    saasApplicationName: 'easyfranchise-kymacrossconsumption-e530d087',
-					btpLandscape: 'canary',
-                    btpRegion: 'eu10-canary',
-                    saasSubscribtionPlan: "",
-                    btpSubdomainName: 'cityscooter-bzxa8vyuws'
-                  )
-                }
-                catch(Exception e){
-                  sleep 60;
-                }
+        //   withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+		// 		try{
+        //           unsubscribeFromSaaS(
+        //             script: this,
+        //             btpCredentialsId: env.BTPCredentialID,
+        //             btpGlobalAccountId: '2a979d83-c576-4ff8-a281-8bb45bc5480d',
+        //             saasApplicationName: 'easyfranchise-kymacrossconsumption-e530d087',
+		// 			btpLandscape: 'canary',
+        //             btpRegion: 'eu10-canary',
+        //             saasSubscribtionPlan: "",
+        //             btpSubdomainName: 'cityscooter-bzxa8vyuws'
+        //           )
+        //         }
+        //         catch(Exception e){
+        //           sleep 60;
+        //         }
 
 
-		}
+		// }
 		}
 				stage('Undeploy Apps')
 	{
-        node ('windowskymanode') 
-{
-    deleteDir()
+//         node ('windowskymanode') 
+// {
+//     deleteDir()
 
-              withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
-              {
+//               withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
+//               {
 
-         withKubeConfig([credentialsId: 'kubeconfiglmit']) 
-{
-	          //build job: 'Login_to_KymaDashboard'
+//          withKubeConfig([credentialsId: 'kubeconfiglmit']) 
+// {
+// 	          //build job: 'Login_to_KymaDashboard'
 			
-                        sh '''
-                        git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
-				mv ./kyma-multitenant-extension/* ./
-				git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
-				mv ./btp-kyma-multitenant-extension/* ./
-                          kubectl version
-						   sleep 1m
-                          kubectl config view
-                          pwd
-						  chmod +x ./kyma-un-deployment.sh
-						  ./kyma-un-deployment.sh
+//                         sh '''
+//                         git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
+// 				mv ./kyma-multitenant-extension/* ./
+// 				git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
+// 				mv ./btp-kyma-multitenant-extension/* ./
+//                           kubectl version
+// 						   sleep 1m
+//                           kubectl config view
+//                           pwd
+// 						  chmod +x ./kyma-un-deployment.sh
+// 						  ./kyma-un-deployment.sh
 
-                        '''   
+//                         '''   
               
           
-}
-}  
-}
+// }
+// }  
+// }
           
 		 }	
 		}
