@@ -119,7 +119,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 		{	
 
           withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
-				try{
+				
                   unsubscribeFromSaaS(
                     script: this,
                     btpCredentialsId: env.BTPCredentialID,
@@ -130,11 +130,8 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
                     saasSubscribtionPlan: "",
                     btpSubdomainName: 'cityscooter-bzxa8vyuws'
                   )
-                }
-                catch(Exception e){
-                  sleep 60;
-                  error(e.toString())
-                }
+                
+                
 
 
 		}
