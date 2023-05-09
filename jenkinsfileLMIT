@@ -89,6 +89,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
                         kubectl config view 	
                         ./btpsa-deployment.sh
                         '''   
+						 sleep 200
               
           }
            
