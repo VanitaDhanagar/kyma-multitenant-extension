@@ -133,7 +133,6 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
                 }
                 catch(Exception e){
                   sleep 60;
-                  error(e.toString())
                 }
 
 
