@@ -70,50 +70,50 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 			}
 			stage('Application deployment')
 	{
-		node ('windowskymanode') 
-       {	
+// 		node ('windowskymanode') 
+//        {	
 
-              withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
-              {
-		withKubeConfig([credentialsId: 'kubeconfiglmit']) 
-{
+//               withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
+//               {
+// 		withKubeConfig([credentialsId: 'kubeconfiglmit']) 
+// {
              
  
-                        sh '''
-						 git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
-				         mv ./kyma-multitenant-extension/* ./
-						 git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
-				         mv ./btp-kyma-multitenant-extension/* ./
-						 choco install jq					  
-                        kubectl config view 	
-                        ./btpsa-deployment.sh
-                        '''   
+//                         sh '''
+// 						 git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
+// 				         mv ./kyma-multitenant-extension/* ./
+// 						 git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
+// 				         mv ./btp-kyma-multitenant-extension/* ./
+// 						 choco install jq					  
+//                         kubectl config view 	
+//                         ./btpsa-deployment.sh
+//                         '''   
               
-          }
+//           }
            
-	   }
-	   }
+// 	   }
+// 	   }
 		 }
 		
 		stage('UI_Test_Execution')
 		{
-			withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){		
-			    data = readJSON file: './config/manifest.json'		  
-				paramSub = "${data.subaccounts[0].display_name}"
-				print paramSub
-				landscapeUrl = "${data.global_logon.landscape_url}"			
-				print landscapeUrl
-				orgname = "${data.subaccounts[0].org_name}"
-				print orgname
-				spacename = "${data.subaccounts[0].space_name}"
-				print spacename
-				username = env.username
-				print username
-				password = env.password
-				print password
-				build job: 'Kyma_Multitenant_LMIT_UI_Canary_Mock', parameters: [[$class: 'StringParameterValue', name: 'URL', value: landscapeUrl],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'Subaccount', value: paramSub]]
+		// 	withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){		
+		// 	    data = readJSON file: './config/manifest.json'		  
+		// 		paramSub = "${data.subaccounts[0].display_name}"
+		// 		print paramSub
+		// 		landscapeUrl = "${data.global_logon.landscape_url}"			
+		// 		print landscapeUrl
+		// 		orgname = "${data.subaccounts[0].org_name}"
+		// 		print orgname
+		// 		spacename = "${data.subaccounts[0].space_name}"
+		// 		print spacename
+		// 		username = env.username
+		// 		print username
+		// 		password = env.password
+		// 		print password
+		// 		build job: 'Kyma_Multitenant_LMIT_UI_Canary_Mock', parameters: [[$class: 'StringParameterValue', name: 'URL', value: landscapeUrl],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'Subaccount', value: paramSub]]
 
-		}
+		// }
 		}
 		stage('Unsubscribe Application')
 		{	
