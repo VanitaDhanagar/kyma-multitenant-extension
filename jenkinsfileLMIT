@@ -21,8 +21,6 @@ def checkacc() {
 
 node ('windowskymanode') 
 {
-	withKubeConfig([credentialsId: 'kubeconfiglmit']) 
-{
 
 dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, 'puserpwd':puserpwd], dockerImage: 'docker.wdf.sap.corp:51010/sfext:v3-py' )
 {
@@ -30,7 +28,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 
 		stage ('Git-clone') 
 			{
-			    deleteDir()
+				deleteDir()
                 checkout scm
 				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
 				sh'''
@@ -70,16 +68,35 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 				}
 				  
 			}
-stage('deployment')
+			stage('deployment')
 	{
-	withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
+		node ('windowskymanode') 
+       {	
+
+              withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
               {
-                 sh '''						  
-                     kubectl config view
+		withKubeConfig([credentialsId: 'kubeconfiglmit']) 
+{
+             
+ 
+                        sh '''
+						 
+						 choco install jq
+
+						  
+                        kubectl config view
+                          
+						
                     ./btpsa-deployment.sh		
-                  '''   
-             }
-	   
+
+							
+
+                        '''   
+              
+          }
+           
+	   }
+	   }
 		 }
 		
 		stage ("create_customer_destination")
@@ -145,7 +162,6 @@ stage('deployment')
 	finally {
 		emailext body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: 'vanita.dhanagar@sap.com'
 	}
-}
 }
 } 
 
