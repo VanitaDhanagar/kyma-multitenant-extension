@@ -125,7 +125,8 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
                     btpCredentialsId: env.BTPCredentialID,
                     btpGlobalAccountId: '2a979d83-c576-4ff8-a281-8bb45bc5480d',
                     saasApplicationName: 'easyfranchise-kymacrossconsumption-e530d087',
-                    btpRegion: parameters.config.btpRegion == "eu10-canary"? 'sap' : parameters.config.btpRegion,
+					btpLandscape: 'canary'
+                    btpRegion: 'eu10-canary',
                     saasSubscribtionPlan: 'default',
                     btpSubdomainName: 'cityscooter-bzxa8vyuws'
                   )
