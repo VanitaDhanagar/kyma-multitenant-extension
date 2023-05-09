@@ -119,7 +119,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 		{	
 
           withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
-				
+				try{
                   unsubscribeFromSaaS(
                     script: this,
                     btpCredentialsId: env.BTPCredentialID,
@@ -127,17 +127,19 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
                     saasApplicationName: 'easyfranchise-kymacrossconsumption-e530d087',
 					btpLandscape: 'canary',
                     btpRegion: 'eu10-canary',
-                    saasSubscribtionPlan: " ",
+                    saasSubscribtionPlan: "",
                     btpSubdomainName: 'cityscooter-bzxa8vyuws'
-                  
-				  )
-                
-                
+                  )
+                }
+                catch(Exception e){
+                  sleep 60;
+                  error(e.toString())
+                }
 
 
 		}
 		}
-		stage('Undeploy Apps')
+				stage('Undeploy Apps')
 	{
         node ('windowskymanode') 
 {
