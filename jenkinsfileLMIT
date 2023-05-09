@@ -129,13 +129,47 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
                     btpRegion: 'eu10-canary',
                     saasSubscribtionPlan: "",
                     btpSubdomainName: 'cityscooter-bzxa8vyuws'
-                  )
+                  
+				  )
                 
                 
 
 
 		}
 		}
+		stage('Delete Kyma-instances and apps')
+	{
+        node ('windowskymanode') 
+{
+    deleteDir()
+
+              withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
+              {
+
+         withKubeConfig([credentialsId: 'kubeconfiglmit']) 
+{
+	          //build job: 'Login_to_KymaDashboard'
+			
+                        sh '''
+                        git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
+				mv ./kyma-multitenant-extension/* ./
+				git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
+				mv ./btp-kyma-multitenant-extension/* ./
+                          kubectl version
+						   sleep 1m
+                          kubectl config view
+                          pwd
+						  chmod +x ./kyma-un-deployment.sh
+						  ./kyma-un-deployment.sh
+
+                        '''   
+              
+          
+}
+}  
+}
+          
+		 }	
 		}
 				 
 	catch(e){
