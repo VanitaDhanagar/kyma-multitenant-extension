@@ -19,7 +19,9 @@ def checkacc() {
 	
 }
 
-node ('master') 
+node ('windowskymanode') 
+{
+	withKubeConfig([credentialsId: 'kubeconfiglmit']) 
 {
 
 dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, 'puserpwd':puserpwd], dockerImage: 'docker.wdf.sap.corp:51010/sfext:v3-py' )
@@ -28,7 +30,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 
 		stage ('Git-clone') 
 			{
-				cleanWs()
+			    deleteDir()
                 checkout scm
 				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
 				sh'''
@@ -70,21 +72,10 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 			}
 			stage('deployment')
 	{
-		node ('windowskymanode') 
-       {	
-		 deleteDir()
-
-              withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
+	withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
               {
-		withKubeConfig([credentialsId: 'kubeconfiglmit']) 
-{
-             
- 
-                        sh '''
-						 git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
-				         mv ./kyma-multitenant-extension/* ./
-						 git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
-				         mv ./btp-kyma-multitenant-extension/* ./
+                 sh '''
+					
 						 choco install jq
 						  
                           kubectl config view
@@ -95,10 +86,10 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 
                         '''   
               
-          }
+          
            
 	   }
-	   }
+	   
 		 }
 		
 		stage ("create_customer_destination")
@@ -164,6 +155,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 	finally {
 		emailext body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: 'vanita.dhanagar@sap.com'
 	}
+}
 }
 } 
 
