@@ -107,7 +107,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
                     saasApplicationName: 'easyfranchise-kymacrossconsumption-e530d087',
 					btpLandscape: 'canary',
                     btpRegion: 'eu10-canary',
-                    saasSubscribtionPlan: "",
+                    saasSubscribtionPlan: 'default',
                     btpSubdomainName: 'cityscooter-bzxa8vyuws'
                   )
                 }
