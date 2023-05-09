@@ -1,5 +1,5 @@
 #!/usr/bin/env groovy
-@Library(['piper-lib', 'piper-lib-os']) _
+@Library(['piper-lib', 'piper-lib-os','lmit-jenkins-lib']) _
 
 def checkacc() {
 	
@@ -114,7 +114,30 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 				build job: 'Kyma_Multitenant_LMIT_UI_Canary_Mock', parameters: [[$class: 'StringParameterValue', name: 'URL', value: landscapeUrl],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'Subaccount', value: paramSub]]
 
 		}
-		}	
+		}
+		stage('Unsubscribe Application')
+		{	
+
+          withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+				try{
+                  unsubscribeFromSaaS(
+                    script: this,
+                    btpCredentialsId: env.BTPCredentialID,
+                    btpGlobalAccountId: '2a979d83-c576-4ff8-a281-8bb45bc5480d',
+                    saasApplicationName: 'easyfranchise-kymacrossconsumption-e530d087',
+                    btpRegion: 'eu10-canary',
+                    saasSubscribtionPlan: 'default',
+                    btpSubdomainName: 'cityscooter-bzxa8vyuws'
+                  )
+                }
+                catch(Exception e){
+                  sleep 60;
+                  error(e.toString())
+                }
+
+
+		}
+		}
 		}
 				 
 	catch(e){

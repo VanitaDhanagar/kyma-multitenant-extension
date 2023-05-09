@@ -140,7 +140,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 		withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
 
 			  sh '''
-					  echo "************ delete provider subaccount ************************************** "
+					  echo "************ delete customer subaccount ************************************** "
 					  echo "************************************************************************** " 
 						   cd scripts
 						   python3 delete_subaccount.py
