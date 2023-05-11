@@ -51,10 +51,10 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 			}
 			stage ('check_Subaccount_exist') 
 			{
-				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
            
 				    checkSubaccount(
-							btpCredentialsId: env.BTPCredentialID,
+							btpCredentialsId: params.credentialsId,
 							btpGlobalAccountId: params.btpGlobalAccountId,
 							btpSubdomainName: params.btpSubdomainName,
 							btpLandscape: params.btpLandscape,
@@ -94,10 +94,10 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 		 }
 		stage('Subscribe Application')
 		{
-			   withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+			   withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
 				
                   subscribeToSaaS(
-				   btpCredentialsId: env.BTPCredentialID,
+				   btpCredentialsId: params.credentialsId,
 				   btpGlobalAccountId: params.btpGlobalAccountId, 
 				   btpSubdomainName: params.Subscriber1Subdomain, 
 				   btpRegion: params.btpRegion, 
@@ -113,7 +113,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 		}
 		stage('UI_Test_Execution')
 		{
-			withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){		
+			withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){		
 			
 				username = env.username
 				print username
@@ -126,11 +126,11 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 		stage('Unsubscribe Application')
 		{	
 
-          withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+          withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
 				
                   unsubscribeFromSaaS(
                     script: this,
-                    btpCredentialsId: env.BTPCredentialID,
+                    btpCredentialsId: params.credentialsId,
                     btpGlobalAccountId: params.btpGlobalAccountId,
                     saasApplicationName: params.saasApplicationName,
 					btpLandscape: params.btpLandscape,
