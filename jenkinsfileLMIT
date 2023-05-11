@@ -18,17 +18,22 @@ node ('windowskymanode')
             description: 'BTP subdomain name of the provider subaccount')
 
 		 string(name: 'btpSubdomainName2', defaultValue: 'cityscooter-bzxa8vyuws',
-            description: 'BTP subdomain name of the provider subaccount')
+            description: 'BTP subdomain name of the customer subaccount')
 
 		string(name: 'saasApplicationName', defaultValue: 'easyfranchise-kymacrossconsumption-e530d087',
-            description: 'BTP subdomain name of the provider subaccount')
+            description: 'BTP saasApplicationName')
         
         string(name: 'btpRegion', defaultValue: 'eu10-canary',
             description: 'BTP region of the subaccount')
     
         string(name: 'btpLandscape', defaultValue: 'canary',
-            description: 'BTP region of the subaccount')
+            description: ' btpLandscape')
 
+        string(name: 'btpLandscapeurl', defaultValue: 'https://canary.cockpit.btp.int.sap/cockpit#/globalaccount/2a979d83-c576-4ff8-a281-8bb45bc5480d',
+            description: ' btpLandscapeurl')
+
+			 string(name: 'subdisplayname', defaultValue: 'cityscooter',
+            description: 'BTP subaccount subscriber display name')
      
         
     } 
@@ -117,23 +122,15 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 		}
 		stage('UI_Test_Execution')
 		{
-		// 	withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){		
-		// 	    data = readJSON file: './config/manifest.json'		  
-		// 		paramSub = "${data.subaccounts[0].display_name}"
-		// 		print paramSub
-		// 		landscapeUrl = "${data.global_logon.landscape_url}"			
-		// 		print landscapeUrl
-		// 		orgname = "${data.subaccounts[0].org_name}"
-		// 		print orgname
-		// 		spacename = "${data.subaccounts[0].space_name}"
-		// 		print spacename
-		// 		username = env.username
-		// 		print username
-		// 		password = env.password
-		// 		print password
-		// 		build job: 'Kyma_Multitenant_LMIT_UI_Canary_Mock', parameters: [[$class: 'StringParameterValue', name: 'URL', value: landscapeUrl],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'Subaccount', value: paramSub]]
+			withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){		
+			
+				username = env.username
+				print username
+				password = env.password
+				print password
+				build job: 'Kyma_Multitenant_LMIT_UI_Canary_Mock', parameters: [[$class: 'StringParameterValue', name: 'URL', value: params.btpLandscapeurl],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'Subaccount', value: params.subdisplayname]]
 
-		// }
+		}
 		}
 		stage('Unsubscribe Application')
 		{	
