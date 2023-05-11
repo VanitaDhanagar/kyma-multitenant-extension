@@ -24,7 +24,9 @@ node ('windowskymanode')
 
 dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, 'puserpwd':puserpwd], dockerImage: 'docker.wdf.sap.corp:51010/sfext:v3-py' )
 {
-	try {
+try {
+	  withKubeConfig([credentialsId: 'kubeconfiglmit']) 
+{
 
 		stage ('Git-clone') 
 			{
@@ -70,53 +72,46 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 			}
 			stage('Application deployment')
 	{
-		node ('windowskymanode') 
-       {	
-		deleteDir()
+	
 
               withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
               {
-		withKubeConfig([credentialsId: 'kubeconfiglmit']) 
-{
-             
+           
  
                         sh '''
-						 git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
-				         mv ./kyma-multitenant-extension/* ./
-						 git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
-				         mv ./btp-kyma-multitenant-extension/* ./
+						
 						 choco install jq					  
                         kubectl config view 	
                         ./btpsa-deployment.sh
                         '''   
-						 sleep 200;
+						 sleep 100;
               
           }
            
-	   }
-	   }
+	   
+	   
 		 }
 		stage('Subscribe Application')
-		{
-			   withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
-				try{
-                  subscribeToSaaS(
-                    script: this,
-                    btpCredentialsId: env.BTPCredentialID,
-                    btpGlobalAccountId: '2a979d83-c576-4ff8-a281-8bb45bc5480d',
-                    saasApplicationName: 'easyfranchise-kymacrossconsumption-e530d087',
-					btpLandscape: 'canary',
-                    btpRegion: 'eu10-canary',
-                    saasSubscribtionPlan: 'default',
-                    btpSubdomainName: 'cityscooter-bzxa8vyuws'
-                  )
-                }
-                catch(Exception e){
-                  sleep 60;
-                }
+		 {
+		// 	   withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+		// 		try{
+        //           subscribeToSaaS(
+        //             script: this,
+        //             btpCredentialsId: env.BTPCredentialID,
+        //             btpGlobalAccountId: '2a979d83-c576-4ff8-a281-8bb45bc5480d',
+        //             saasApplicationName: 'easyfranchise-kymacrossconsumption-e530d087',
+		// 			btpLandscape: 'canary',
+        //             btpRegion: 'eu10-canary',
+        //             saasSubscribtionPlan: 'default',
+        //             btpSubdomainName: 'cityscooter-bzxa8vyuws'
+        //           )
+        //         }
+        //         catch(Exception e){
+        //           sleep 60;
+        //         }
 
 
-		}
+		// }
 		}
 		stage('UI_Test_Execution')
 		{
@@ -194,6 +189,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 // }
           
 		 }	
+}
 		}
 				 
 	catch(e){
