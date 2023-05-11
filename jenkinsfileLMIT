@@ -4,6 +4,34 @@
 
 node ('windowskymanode') 
 {
+	parameters{
+        string(name: 'credentialsId', defaultValue: 'pusercf2',
+            description: 'The user with which we can access BTP Landscape and CF')
+      
+        string(name: 'Subscriber1Subdomain', defaultValue: 'cityscooter-bzxa8vyuws',
+            description: 'BTP subdomain name of the subaccount')
+
+        string(name: 'btpGlobalAccountId', defaultValue: '2a979d83-c576-4ff8-a281-8bb45bc5480d',
+            description: 'BTP Global AccountId')
+        
+        string(name: 'btpSubdomainName', defaultValue: 'kymacrossconsumption-e530d087',
+            description: 'BTP subdomain name of the provider subaccount')
+
+		 string(name: 'btpSubdomainName2', defaultValue: 'cityscooter-bzxa8vyuws',
+            description: 'BTP subdomain name of the provider subaccount')
+
+		string(name: 'saasApplicationName', defaultValue: 'easyfranchise-kymacrossconsumption-e530d087',
+            description: 'BTP subdomain name of the provider subaccount')
+        
+        string(name: 'btpRegion', defaultValue: 'eu10-canary',
+            description: 'BTP region of the subaccount')
+    
+        string(name: 'btpLandscape', defaultValue: 'canary',
+            description: 'BTP region of the subaccount')
+
+     
+        
+    } 
 
 dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, 'puserpwd':puserpwd], dockerImage: 'docker.wdf.sap.corp:51010/sfext:v3-py' )
 {
@@ -31,10 +59,10 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
            
 				    checkSubaccount(
 							btpCredentialsId: env.BTPCredentialID,
-							btpGlobalAccountId: '2a979d83-c576-4ff8-a281-8bb45bc5480d',
-							btpSubdomainName: 'kymacrossconsumption-e530d087',
-							btpLandscape: 'canary',
-							btpRegion: 'eu10-canary',
+							btpGlobalAccountId: params.btpGlobalAccountId,
+							btpSubdomainName: params.btpSubdomainName,
+							btpLandscape: params.btpLandscape,
+							btpRegion: params.btpRegion,
 							command: 'list accounts/subaccount'
 					)
 
@@ -74,11 +102,11 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 				
                   subscribeToSaaS(
 				   btpCredentialsId: env.BTPCredentialID,
-				   btpGlobalAccountId: '2a979d83-c576-4ff8-a281-8bb45bc5480d', 
-				   btpSubdomainName: 'cityscooter-bzxa8vyuws', 
-				   btpRegion: 'eu10-canary', 
-				   btpLandscape: 'canary', 
-				   saasApplicationName: 'easyfranchise-kymacrossconsumption-e530d087', 
+				   btpGlobalAccountId: params.btpGlobalAccountId, 
+				   btpSubdomainName: params.btpSubdomainName2, 
+				   btpRegion: params.btpRegion, 
+				   btpLandscape: params.btpLandscape, 
+				   saasApplicationName: params.saasApplicationName, 
 				   saasSubscribtionPlan: 'default',
 				   saasDefaultPlanRequired: true, 
 				   pollWaitSeconds: 10 )
