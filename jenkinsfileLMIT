@@ -16,9 +16,7 @@ node ('windowskymanode')
         
         string(name: 'btpSubdomainName', defaultValue: 'kymacrossconsumption-e530d087',
             description: 'BTP subdomain name of the provider subaccount')
-
-		 
-
+ 
 		string(name: 'saasApplicationName', defaultValue: 'easyfranchise-kymacrossconsumption-e530d087',
             description: 'BTP saasApplicationName')
         
@@ -31,7 +29,7 @@ node ('windowskymanode')
         string(name: 'btpLandscapeurl', defaultValue: 'https://canary.cockpit.btp.int.sap/cockpit#/globalaccount/2a979d83-c576-4ff8-a281-8bb45bc5480d',
             description: ' btpLandscapeurl')
 
-			 string(name: 'subdisplayname', defaultValue: 'cityscooter',
+			 string(name: 'subdisplayname', defaultValue: 'CityScooter',
             description: 'BTP subaccount subscriber display name')
      
         
@@ -134,22 +132,24 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 		stage('Unsubscribe Application')
 		{	
 
-        //   withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
-		// 		
-        //           unsubscribeFromSaaS(
-        //             script: this,
-        //             btpCredentialsId: env.BTPCredentialID,
-        //             btpGlobalAccountId: '2a979d83-c576-4ff8-a281-8bb45bc5480d',
-        //             saasApplicationName: 'easyfranchise-kymacrossconsumption-e530d087',
-		// 			btpLandscape: 'canary',
-        //             btpRegion: 'eu10-canary',
-        //             saasSubscribtionPlan: "",
-        //             btpSubdomainName: 'cityscooter-bzxa8vyuws'
-        //           )
-        //         
+          withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+				
+                  unsubscribeFromSaaS(
+                    script: this,
+                    btpCredentialsId: env.BTPCredentialID,
+                    btpGlobalAccountId: params.btpGlobalAccountId,
+                    saasApplicationName: params.saasApplicationName,
+					btpLandscape: params.btpLandscape,
+                    btpRegion: params.btpRegion,
+                    saasSubscribtionPlan: 'default',
+                    btpSubdomainName: params.Subscriber1Subdomain,
+					saasDefaultPlanRequired: true, 
+				   pollWaitSeconds: 10 
+                  )
+                
 
 
-		// }
+		}
 		}
 				stage('Undeploy Apps')
 	{
