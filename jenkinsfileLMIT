@@ -101,15 +101,15 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 			   withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
 				try{
                   subscribeToSaaS(
-                    script: this,
-                    btpCredentialsId: env.BTPCredentialID,
-                    btpGlobalAccountId: '2a979d83-c576-4ff8-a281-8bb45bc5480d',
-                    saasApplicationName: 'easyfranchise-kymacrossconsumption-e530d087',
-					btpLandscape: 'canary',
-                    btpRegion: 'eu10-canary',
-                    saasSubscribtionPlan: '" "',,
-                    btpSubdomainName: 'cityscooter-bzxa8vyuws'
-                  )
+				   btpCredentialsId: env.BTPCredentialID,
+				   btpGlobalAccountId: '2a979d83-c576-4ff8-a281-8bb45bc5480d', 
+				   btpSubdomainName: 'cityscooter-bzxa8vyuws', 
+				   btpRegion: 'eu10-canary', 
+				   btpLandscape: 'canary', 
+				   saasApplicationName: 'easyfranchise-kymacrossconsumption-e530d087', 
+				   saasSubscribtionPlan: '" "',
+				   saasDefaultPlanRequired: true, 
+				   pollWaitSeconds: 10 )
                 }
                 catch(Exception e){
                   sleep 60;
