@@ -25,12 +25,6 @@ node ('windowskymanode')
     
         string(name: 'btpLandscape', defaultValue: 'canary',
             description: ' btpLandscape')
-
-        string(name: 'btpLandscapeurl', defaultValue: 'https://canary.cockpit.btp.int.sap/cockpit#/globalaccount/2a979d83-c576-4ff8-a281-8bb45bc5480d',
-            description: ' btpLandscapeurl')
-
-			 string(name: 'subdisplayname', defaultValue: 'CityScooter',
-            description: 'BTP subaccount subscriber display name')
      
         
     } 
@@ -125,7 +119,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 				print username
 				password = env.password
 				print password
-				build job: 'Kyma_Multitenant_LMIT_UI_Canary_Mock', parameters: [[$class: 'StringParameterValue', name: 'URL', value: params.btpLandscapeurl],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'Subaccount', value: params.subdisplayname]]
+				build job: 'Kyma_Multitenant_LMIT_UI_Canary_Mock', parameters: [[$class: 'StringParameterValue', name: 'URL', value: 'https://canary.cockpit.btp.int.sap/cockpit#/globalaccount/2a979d83-c576-4ff8-a281-8bb45bc5480'],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'Subaccount', value: 'CityScooter']]
 
 		}
 		}
