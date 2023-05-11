@@ -25,8 +25,8 @@ node ('windowskymanode')
 dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, 'puserpwd':puserpwd], dockerImage: 'docker.wdf.sap.corp:51010/sfext:v3-py' )
 {
 try {
-	  withKubeConfig([credentialsId: 'kubeconfiglmit']) 
-{
+
+
 
 		stage ('Git-clone') 
 			{
@@ -40,6 +40,7 @@ try {
 				mv ./ReusableActions/* ./
                 git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
 				mv ./btp-kyma-multitenant-extension/* ./
+				choco install jq
 				'''
 				
 
@@ -72,22 +73,21 @@ try {
 			}
 			stage('Application deployment')
 	{
-	
-
-              withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
+	withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
               {
+	withKubeConfig([credentialsId: 'kubeconfiglmit']) 
+{
            
  
-                        sh '''
-						
-						 choco install jq					  
+                        sh '''		  
                         kubectl config view 	
                         ./btpsa-deployment.sh
                         '''   
 						 sleep 100;
               
           }
-           
+		  
+			  }
 	   
 	   
 		 }
@@ -189,7 +189,7 @@ try {
 // }
           
 		 }	
-}
+
 		}
 				 
 	catch(e){
