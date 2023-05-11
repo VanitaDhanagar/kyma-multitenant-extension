@@ -17,8 +17,7 @@ node ('windowskymanode')
         string(name: 'btpSubdomainName', defaultValue: 'kymacrossconsumption-e530d087',
             description: 'BTP subdomain name of the provider subaccount')
 
-		 string(name: 'btpSubdomainName2', defaultValue: 'cityscooter-bzxa8vyuws',
-            description: 'BTP subdomain name of the customer subaccount')
+		 
 
 		string(name: 'saasApplicationName', defaultValue: 'easyfranchise-kymacrossconsumption-e530d087',
             description: 'BTP saasApplicationName')
@@ -108,7 +107,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
                   subscribeToSaaS(
 				   btpCredentialsId: env.BTPCredentialID,
 				   btpGlobalAccountId: params.btpGlobalAccountId, 
-				   btpSubdomainName: params.btpSubdomainName2, 
+				   btpSubdomainName: params.Subscriber1Subdomain, 
 				   btpRegion: params.btpRegion, 
 				   btpLandscape: params.btpLandscape, 
 				   saasApplicationName: params.saasApplicationName, 
