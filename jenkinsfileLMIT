@@ -119,7 +119,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 				print username
 				password = env.password
 				print password
-				build job: 'Kyma_Multitenant_LMIT_UI_Canary_Mock', parameters: [[$class: 'StringParameterValue', name: 'URL', value: 'https://canary.cockpit.btp.int.sap/cockpit#/globalaccount/2a979d83-c576-4ff8-a281-8bb45bc5480'],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'Subaccount', value: 'CityScooter']]
+				// build job: 'Kyma_Multitenant_LMIT_UI_Canary_Mock', parameters: [[$class: 'StringParameterValue', name: 'URL', value: 'https://canary.cockpit.btp.int.sap/cockpit#/globalaccount/2a979d83-c576-4ff8-a281-8bb45bc5480'],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'Subaccount', value: 'CityScooter']]
 
 		}
 		}
@@ -147,35 +147,34 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 		}
 				stage('Undeploy Apps')
 	{
-//         node ('windowskymanode') 
-// {
-//     deleteDir()
+        node ('windowskymanode') 
+{
+    deleteDir()
 
-//               withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
-//               {
+              withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
+              {
 
-//          withKubeConfig([credentialsId: 'kubeconfiglmit']) 
-// {
-// 	          //build job: 'Login_to_KymaDashboard'
+         withKubeConfig([credentialsId: 'kubeconfiglmit']) 
+{
 			
-//                         sh '''
-//                         git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
-// 				mv ./kyma-multitenant-extension/* ./
-// 				git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
-// 				mv ./btp-kyma-multitenant-extension/* ./
-//                           kubectl version
-// 						   sleep 1m
-//                           kubectl config view
-//                           pwd
-// 						  chmod +x ./kyma-un-deployment.sh
-// 						  ./kyma-un-deployment.sh
+                        sh '''
+                        git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
+				mv ./kyma-multitenant-extension/* ./
+				git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
+				mv ./btp-kyma-multitenant-extension/* ./
+                          kubectl version
+						   sleep 1m
+                          kubectl config view
+                          pwd
+						  chmod +x ./kyma-un-deployment.sh
+						  ./kyma-un-deployment.sh
 
-//                         '''   
+                        '''   
               
           
-// }
-// }  
-// }
+}
+}  
+}
           
 		 }	
 		}
