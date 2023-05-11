@@ -1,0 +1,44 @@
+#!/usr/bin/env groovy
+@Library(['piper-lib', 'piper-lib-os', 'lmit-jenkins-lib']) _
+
+pipeline {
+    agent { label 'windowskymanode' }
+    parameters{
+        string(name: 'credentialsId', defaultValue: 'pusercf2',
+            description: 'The user with which we can access BTP Landscape and CF')
+      
+        string(name: 'Subscriber1Subdomain', defaultValue: 'cityscooter-bzxa8vyuws',
+            description: 'BTP subdomain name of the subaccount')
+
+        string(name: 'btpGlobalAccountId', defaultValue: '2a979d83-c576-4ff8-a281-8bb45bc5480d',
+            description: 'BTP Global AccountId')
+        
+        string(name: 'btpSubdomainName', defaultValue: 'kymacrossconsumption-e530d087',
+            description: 'BTP subdomain name of the provider subaccount')
+
+		string(name: 'saasApplicationName', defaultValue: 'easyfranchise-kymacrossconsumption-e530d087',
+            description: 'BTP subdomain name of the provider subaccount')
+        
+        string(name: 'btpRegion', defaultValue: 'eu10-canary',
+            description: 'BTP region of the subaccount')
+    
+        string(name: 'btpLandscape', defaultValue: 'canary',
+            description: 'BTP region of the subaccount')
+
+     
+        
+    }  
+	  stages {
+        stage('Init workspace and checkout the code') {
+            steps {
+                script {
+                    setupPipelineEnvironment script: this
+                    checkout scm
+                }
+            }
+        }
+
+
+
+	  }
+}
