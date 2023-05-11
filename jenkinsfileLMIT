@@ -1,23 +1,6 @@
 #!/usr/bin/env groovy
 @Library(['piper-lib', 'piper-lib-os','lmit-jenkins-lib']) _
 
-def checkacc() {
-	
-	withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){	  
-				  sh '''
-				  echo "************ Check if Subaccount exists *********************************"
-				  echo "************************************************************************** " 
-					   pip3 install -r requirements.txt
-					   cd scripts
-					   python3 installations.py
-					   python3 subaccount_exists.py  
-				 '''
-				is_account_exists = readFile(file: 'myfile.txt')
-				print(is_account_exists)	
-				return is_account_exists
-	}
-	
-}
 
 node ('windowskymanode') 
 {
@@ -34,8 +17,6 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 				sh'''
 				git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
 				mv ./kyma-multitenant-extension/* ./
-				git clone https://$USERNAME:$PASSWORD@github.tools.sap/btp-ppu-test/ReusableActions.git --branch 'master'
-				mv ./ReusableActions/* ./
                 git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
 				mv ./btp-kyma-multitenant-extension/* ./
 				'''
@@ -48,22 +29,14 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 			{
 				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
            
-				    writeJSON file: 'manifest.json', json: params.ManifestJsonFileContent
-							data1 = readJSON file:'manifest.json'
-							print(data1) 
-				    sh '''
-				    mv manifest.json ./config/
-					env
-				    '''
-				    is_account_exists = checkacc()
-				    print(is_account_exists)	
-
-				    if (is_account_exists == 'True') {
-
-					print("Subaccount already exists.")
-
-						
-				     }
+				    checkSubaccount(
+							btpCredentialsId: env.BTPCredentialID,
+							btpGlobalAccountId: '2a979d83-c576-4ff8-a281-8bb45bc5480d',
+							btpSubdomainName: 'kymacrossconsumption-e530d087',
+							btpLandscape: 'canary',
+							btpRegion: 'eu10-canary',
+							command: 'list accounts/subaccount'
+					)
 
 				}
 				  
@@ -79,8 +52,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 		withKubeConfig([credentialsId: 'kubeconfiglmit']) 
 {
              
- 
-                        sh '''
+                       sh '''
 						 git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
 				         mv ./kyma-multitenant-extension/* ./
 						 git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
@@ -99,7 +71,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 		stage('Subscribe Application')
 		{
 			   withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
-				try{
+				
                   subscribeToSaaS(
 				   btpCredentialsId: env.BTPCredentialID,
 				   btpGlobalAccountId: '2a979d83-c576-4ff8-a281-8bb45bc5480d', 
@@ -110,10 +82,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 				   saasSubscribtionPlan: 'default',
 				   saasDefaultPlanRequired: true, 
 				   pollWaitSeconds: 10 )
-                }
-                catch(Exception e){
-                  sleep 60;
-                }
+                
 
 
 		}
@@ -142,7 +111,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 		{	
 
         //   withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:env.BTPCredentialID,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
-		// 		try{
+		// 		
         //           unsubscribeFromSaaS(
         //             script: this,
         //             btpCredentialsId: env.BTPCredentialID,
@@ -153,10 +122,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
         //             saasSubscribtionPlan: "",
         //             btpSubdomainName: 'cityscooter-bzxa8vyuws'
         //           )
-        //         }
-        //         catch(Exception e){
-        //           sleep 60;
-        //         }
+        //         
 
 
 		// }
