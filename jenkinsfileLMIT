@@ -36,6 +36,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 		stage ('Git-clone') 
 			{
 				deleteDir()
+                checkout scm
 				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
 				sh'''
 				git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
@@ -66,15 +67,20 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 			}
 			stage('Application deployment')
 	{
-		
+		node ('windowskymanode') 
+       {	
+		deleteDir()
 
-    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
+              withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
               {
 		withKubeConfig([credentialsId: 'kubeconfiglmit']) 
 {
              
                        sh '''
-					
+						 git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
+				         mv ./kyma-multitenant-extension/* ./
+						 git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
+				         mv ./btp-kyma-multitenant-extension/* ./
 						 choco install jq					  
                         kubectl config view 	
                         ./btpsa-deployment.sh
@@ -83,7 +89,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
               
           }
            
-	   
+	   }
 	   }
 		 }
 		stage('Subscribe Application')
@@ -141,7 +147,9 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 		}
 				stage('Undeploy Apps')
 	{
-
+        node ('windowskymanode') 
+{
+    deleteDir()
 
               withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
               {
@@ -150,7 +158,10 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 {
 			
                         sh '''
-                 
+                        git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
+				mv ./kyma-multitenant-extension/* ./
+				git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
+				mv ./btp-kyma-multitenant-extension/* ./
                           kubectl version
 						   sleep 1m
                           kubectl config view
@@ -162,7 +173,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
               
           
 }
-
+}  
 }
           
 		 }	
