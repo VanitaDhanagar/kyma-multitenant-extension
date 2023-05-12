@@ -128,15 +128,15 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 				   pollWaitSeconds: 10 )
 				   sleep 60;
 				
-				assignRoleToUser(
-                      btpCredentialsId: params.credentialsId,
-                      btpGlobalAccountId: params.btpGlobalAccountId,
-                      btpSubdomainName: params.Subscriber1Subdomain,
-                      btpRegion: params.btpRegion,
-					  btpLandscape: params.btpLandscape,
-                      roleCollection: 'Easy Franchise Backend (kymacrossconsumption-e530d087)',
-					  role:'Backend'
-                  )
+				// assignRoleToUser(
+                //       btpCredentialsId: params.credentialsId,
+                //       btpGlobalAccountId: params.btpGlobalAccountId,
+                //       btpSubdomainName: params.Subscriber1Subdomain,
+                //       btpRegion: params.btpRegion,
+				// 	  btpLandscape: params.btpLandscape,
+                //       roleCollection: 'Easy Franchise Backend (kymacrossconsumption-e530d087)',
+				// 	  role:'Backend'
+                //   )
                 
 
 
@@ -144,23 +144,23 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 		}
 	
 		
-		dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, 'puserpwd':puserpwd], dockerImage: 'engsrvval.int.repositories.cloud.sap/testrunner:latest' ) {
-	      stage('UI Test') {
-		   withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-			//build job: 'risk-manage-cls-Runtime'
-		      sh '''
-			  if [ -d "CloudPortal" ]
-			  then
-			    rm -rf CloudPortal
-			  fi 
-			git clone --single-branch --branch "us10" "https://11a1e1192fe5096b335b2b4c1201d43cb35bd93d@github.tools.sap/BTP-E2EScenarioValidation/CloudPortal.git"  
-		       '''
-		      sh" cd ${WORKSPACE}/CloudPortal && mvn clean test -Dtestng.File=${WORKSPACE}/CloudPortal/XMLFilesRefApp/testng_kyma_multitenant.xml  -DonboardingScenarioPortalURL=${params.LandscapeURL} -Dorg.freemarker.loggerLibrary=none -DonboardingScenarioPortalusername=$USERNAME -DonboardingScenarioPortalPass=$PASSWORD -DsubAccountName=${params.Subaccount}" 
+	// 	dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, 'puserpwd':puserpwd], dockerImage: 'engsrvval.int.repositories.cloud.sap/testrunner:latest' ) {
+	//       stage('UI Test') {
+	// 	   withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+	// 		//build job: 'risk-manage-cls-Runtime'
+	// 	      sh '''
+	// 		  if [ -d "CloudPortal" ]
+	// 		  then
+	// 		    rm -rf CloudPortal
+	// 		  fi 
+	// 		git clone --single-branch --branch "us10" "https://11a1e1192fe5096b335b2b4c1201d43cb35bd93d@github.tools.sap/BTP-E2EScenarioValidation/CloudPortal.git"  
+	// 	       '''
+	// 	      sh" cd ${WORKSPACE}/CloudPortal && mvn clean test -Dtestng.File=${WORKSPACE}/CloudPortal/XMLFilesRefApp/testng_kyma_multitenant.xml  -DonboardingScenarioPortalURL=${params.LandscapeURL} -Dorg.freemarker.loggerLibrary=none -DonboardingScenarioPortalusername=$USERNAME -DonboardingScenarioPortalPass=$PASSWORD -DsubAccountName=${params.Subaccount}" 
 
 		
-		}
-	   }
-	}
+	// 	}
+	//    }
+	// }
 		stage('Unsubscribe Application')
 		{	
 
