@@ -81,9 +81,9 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 				         mv ./btp-kyma-multitenant-extension/* ./
 						curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 --output jq
 					    chmod +x jq
-					    mv jq /usr/local/bin/jq	
-										  
-                        kubectl config view 	
+					    mv jq /usr/local/bin/jq					  
+                        kubectl config view 
+						chmod +x ./btpsa-deployment.sh
                         ./btpsa-deployment.sh
                         '''   
 						 sleep 200;
