@@ -7,7 +7,7 @@ node ('master')
 	
 properties([
   parameters([
-   string(name: 'LandscapeURL', defaultValue: 'https://canary.cockpit.btp.int.sap/cockpit#/globalaccount/2a979d83-c576-4ff8-a281-8bb45bc5480',description: 'Landscape URL')
+   string(name: 'LandscapeURL', defaultValue: 'https://canary.cockpit.btp.int.sap/cockpit#/globalaccount/2a979d83-c576-4ff8-a281-8bb45bc5480',description: 'Landscape URL'),
   string(name: 'Subaccount', defaultValue: 'CityScooter',description: 'Provider Subaccount')
 
     
