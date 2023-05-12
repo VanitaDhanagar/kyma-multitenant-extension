@@ -117,9 +117,15 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 
 		// }
 		}
-		dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, 'puserpwd':puserpwd], dockerImage: 'engsrvval.int.repositories.cloud.sap/testrunner:latest' ) {
-	      stage('UI Test') {
-		   withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+ node ('master') 
+{
+	 stage('UI Test')
+	 {
+		dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, 'puserpwd':puserpwd], dockerImage: 'engsrvval.int.repositories.cloud.sap/testrunner:latest' )
+		 {
+	     
+		   withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
+		    {
 			//build job: 'risk-manage-cls-Runtime'
 		      sh '''
 			  if [ -d "CloudPortal" ]
@@ -134,6 +140,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 		}
 	   }
 	}
+}
 		// stage('UI_Test_Execution')
 		// {
 		// 	withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){		
