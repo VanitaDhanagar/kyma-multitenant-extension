@@ -126,16 +126,8 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 				   saasSubscribtionPlan: 'default',
 				   saasDefaultPlanRequired: true, 
 				   pollWaitSeconds: 10 )
-                
-
-
-		}
-		}
-		stage('Assign Role')
-		{
-		    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
 				
-			    assignRoleToUser(
+				assignRoleToUser(
                       btpCredentialsId: params.credentialsId,
                       btpGlobalAccountId: params.btpGlobalAccountId,
                       btpSubdomainName: params.Subscriber1Subdomain,
@@ -143,11 +135,13 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 					  btpLandscape: params.btpLandscape,
                       roleCollection: 'Easy Franchise Backend (kymacrossconsumption-e530d087)'
                   )
-			   
-			}
-		}
-		
+                
 
+
+		}
+		}
+	
+		
 		dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, 'puserpwd':puserpwd], dockerImage: 'engsrvval.int.repositories.cloud.sap/testrunner:latest' ) {
 	      stage('UI Test') {
 		   withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
