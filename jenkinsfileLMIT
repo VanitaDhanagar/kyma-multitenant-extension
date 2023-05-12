@@ -4,27 +4,19 @@
 
 node ('master') 
 {
-	parameters{
-        string(name: 'credentialsId', defaultValue: 'pusercf2',description: 'The user with which we can access BTP Landscape and CF')
-      
-        string(name: 'Subscriber1Subdomain', defaultValue: 'cityscooter-bzxa8vyuws', description: 'BTP subdomain name of the subaccount')
+	
+properties([
+  parameters([
+   string(name: 'LandscapeURL', defaultValue: 'https://canary.cockpit.btp.int.sap/cockpit#/globalaccount/2a979d83-c576-4ff8-a281-8bb45bc5480',description: 'Landscape URL')
+  string(name: 'Subaccount', defaultValue: 'CityScooter',description: 'Provider Subaccount')
 
-        string(name: 'btpGlobalAccountId', defaultValue: '2a979d83-c576-4ff8-a281-8bb45bc5480d',description: 'BTP Global AccountId')
-        
-        string(name: 'btpSubdomainName', defaultValue: 'kymacrossconsumption-e530d087',description: 'BTP subdomain name of the provider subaccount')
- 
-		string(name: 'saasApplicationName', defaultValue: 'easyfranchise-kymacrossconsumption-e530d087',description: 'BTP saasApplicationName')
-        
-        string(name: 'btpRegion', defaultValue: 'eu10-canary',description: 'BTP region of the subaccount')
     
-        string(name: 'btpLandscape', defaultValue: 'canary',description: 'btp Landscape')
+  ])
+])
 
-		string(name: 'LandscapeURL', defaultValue: 'https://canary.cockpit.btp.int.sap/cockpit#/globalaccount/2a979d83-c576-4ff8-a281-8bb45bc5480',description: 'Landscape URL')
-
-		string(name: 'Subaccount', defaultValue: 'CityScooter',description: 'Provider Subaccount')
      
         
-    } 
+    
 
 dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, 'puserpwd':puserpwd], dockerImage: 'docker.wdf.sap.corp:51010/sfext:v3-py' )
 {
