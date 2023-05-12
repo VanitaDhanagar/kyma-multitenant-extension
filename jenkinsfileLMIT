@@ -4,30 +4,37 @@
 
 node ('windowskymanode') 
 {
-	parameters{
+	properties([
+  parameters([
         string(name: 'credentialsId', defaultValue: 'pusercf2',
-            description: 'The user with which we can access BTP Landscape and CF')
+            description: 'The user with which we can access BTP Landscape and CF'),
       
         string(name: 'Subscriber1Subdomain', defaultValue: 'cityscooter-bzxa8vyuws',
-            description: 'BTP subdomain name of the subaccount')
+            description: 'BTP subdomain name of the subaccount'),
 
         string(name: 'btpGlobalAccountId', defaultValue: '2a979d83-c576-4ff8-a281-8bb45bc5480d',
-            description: 'BTP Global AccountId')
+            description: 'BTP Global AccountId'),
         
         string(name: 'btpSubdomainName', defaultValue: 'kymacrossconsumption-e530d087',
-            description: 'BTP subdomain name of the provider subaccount')
+            description: 'BTP subdomain name of the provider subaccount'),
  
 		string(name: 'saasApplicationName', defaultValue: 'easyfranchise-kymacrossconsumption-e530d087',
-            description: 'BTP saasApplicationName')
+            description: 'BTP saasApplicationName'),
         
         string(name: 'btpRegion', defaultValue: 'eu10-canary',
-            description: 'BTP region of the subaccount')
+            description: 'BTP region of the subaccount'),
     
         string(name: 'btpLandscape', defaultValue: 'canary',
-            description: ' btpLandscape')
+            description: ' btpLandscape'),
+
+			string(name: 'LandscapeURL', defaultValue: 'https://canary.cockpit.btp.int.sap/cockpit/#/globalaccount/2a979d83-c576-4ff8-a281-8bb45bc5480d',
+            description: 'BTP LandscapeURL'),
      
+	 string(name: 'Subaccount', defaultValue: 'CityScooter',
+            description: ' Subaccount display name')
         
-    } 
+     ])
+])
 
 dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, 'puserpwd':puserpwd], dockerImage: 'docker.wdf.sap.corp:51010/sfext:v3-py' )
 {
@@ -35,18 +42,18 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 
 		stage ('Git-clone') 
 			{
-				deleteDir()
-                checkout scm
-				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
-				sh'''
-				git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
-				mv ./kyma-multitenant-extension/* ./
-                git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
-				mv ./btp-kyma-multitenant-extension/* ./
-				'''
+				// deleteDir()
+                // checkout scm
+				// withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+				// sh'''
+				// git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
+				// mv ./kyma-multitenant-extension/* ./
+                // git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
+				// mv ./btp-kyma-multitenant-extension/* ./
+				// '''
 				
 
-				}
+				// }
 
 			}
 			stage ('check_Subaccount_exist') 
@@ -112,18 +119,23 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 		// }
 		}
 		
-		// stage('UI_Test_Execution')
-		// {
-		// 	withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){		
-			
-		// 		username = env.username
-		// 		print username
-		// 		password = env.password
-		// 		print password
-		// 		// build job: 'Kyma_Multitenant_LMIT_UI_Canary_Mock', parameters: [[$class: 'StringParameterValue', name: 'URL', value: 'https://canary.cockpit.btp.int.sap/cockpit#/globalaccount/2a979d83-c576-4ff8-a281-8bb45bc5480'],[$class: 'StringParameterValue', name: 'Username', value: username],[$class: 'StringParameterValue', name: 'Password', value: password],[$class: 'StringParameterValue', name: 'Subaccount', value: 'CityScooter']]
+		dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, 'puserpwd':puserpwd], dockerImage: 'engsrvval.int.repositories.cloud.sap/testrunner:latest' ) {
+	      stage('UI Test') {
+		   withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:param.credentialsId, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+			//build job: 'risk-manage-cls-Runtime'
+		      sh '''
+			  if [ -d "CloudPortal" ]
+			  then
+			    rm -rf CloudPortal
+			  fi 
+			git clone --single-branch --branch "us10" "https://11a1e1192fe5096b335b2b4c1201d43cb35bd93d@github.tools.sap/BTP-E2EScenarioValidation/CloudPortal.git"  
+		       '''
+		      sh" cd ${WORKSPACE}/CloudPortal && mvn clean test -Dtestng.File=${WORKSPACE}/CloudPortal/XMLFilesRefApp/testng_kyma_multitenant.xml  -DonboardingScenarioPortalURL=${params.LandscapeURL} -Dorg.freemarker.loggerLibrary=none -DonboardingScenarioPortalusername=$USERNAME -DonboardingScenarioPortalPass=$PASSWORD -DsubAccountName=${params.Subaccount}" 
 
-		// }
-		// }
+		
+		}
+	   }
+	}
 		stage('Unsubscribe Application')
 		{	
 
