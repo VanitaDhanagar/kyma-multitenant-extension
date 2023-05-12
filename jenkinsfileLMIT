@@ -79,7 +79,10 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 				         mv ./kyma-multitenant-extension/* ./
 						 git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
 				         mv ./btp-kyma-multitenant-extension/* ./
-						 choco install jq					  
+						curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 --output jq
+					    chmod +x jq
+					    mv jq /usr/local/bin/jq	
+										  
                         kubectl config view 	
                         ./btpsa-deployment.sh
                         '''   
