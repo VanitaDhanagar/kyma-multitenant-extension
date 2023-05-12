@@ -58,18 +58,18 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 			}
 			stage ('check_Subaccount_exist') 
 			{
-				// withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
            
-				//     checkSubaccount(
-				// 			btpCredentialsId: params.credentialsId,
-				// 			btpGlobalAccountId: params.btpGlobalAccountId,
-				// 			btpSubdomainName: params.btpSubdomainName,
-				// 			btpLandscape: params.btpLandscape,
-				// 			btpRegion: params.btpRegion,
-				// 			command: 'list accounts/subaccount'
-				// 	)
+				    checkSubaccount(
+							btpCredentialsId: params.credentialsId,
+							btpGlobalAccountId: params.btpGlobalAccountId,
+							btpSubdomainName: params.btpSubdomainName,
+							btpLandscape: params.btpLandscape,
+							btpRegion: params.btpRegion,
+							command: 'list accounts/subaccount'
+					)
 
-				// }
+				}
 				  
 			}
 			stage('Application deployment')
@@ -98,9 +98,11 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
                         mv ./kubectl /usr/local/bin/kubectl	
 
                         kubectl version --client
-						
+
 						chmod +x ./btpsa-deployment.sh
 						./btpsa-deployment.sh
+
+						sleep 3m
                        
                         '''   
 						 
@@ -112,93 +114,100 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 		 }
 		stage('Subscribe Application')
 		{
-		// 	   withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+			   withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
 				
-        //           subscribeToSaaS(
-		// 		   btpCredentialsId: params.credentialsId,
-		// 		   btpGlobalAccountId: params.btpGlobalAccountId, 
-		// 		   btpSubdomainName: params.Subscriber1Subdomain, 
-		// 		   btpRegion: params.btpRegion, 
-		// 		   btpLandscape: params.btpLandscape, 
-		// 		   saasApplicationName: params.saasApplicationName, 
-		// 		   saasSubscribtionPlan: 'default',
-		// 		   saasDefaultPlanRequired: true, 
-		// 		   pollWaitSeconds: 10 )
+                  subscribeToSaaS(
+				   btpCredentialsId: params.credentialsId,
+				   btpGlobalAccountId: params.btpGlobalAccountId, 
+				   btpSubdomainName: params.Subscriber1Subdomain, 
+				   btpRegion: params.btpRegion, 
+				   btpLandscape: params.btpLandscape, 
+				   saasApplicationName: params.saasApplicationName, 
+				   saasSubscribtionPlan: 'default',
+				   saasDefaultPlanRequired: true, 
+				   pollWaitSeconds: 10 )
                 
 
 
-		// }
+		}
 		}
 		
-	// 	dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, 'puserpwd':puserpwd], dockerImage: 'engsrvval.int.repositories.cloud.sap/testrunner:latest' ) {
-	//       stage('UI Test') {
-	// 	   withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-	// 		//build job: 'risk-manage-cls-Runtime'
-	// 	      sh '''
-	// 		  if [ -d "CloudPortal" ]
-	// 		  then
-	// 		    rm -rf CloudPortal
-	// 		  fi 
-	// 		git clone --single-branch --branch "us10" "https://11a1e1192fe5096b335b2b4c1201d43cb35bd93d@github.tools.sap/BTP-E2EScenarioValidation/CloudPortal.git"  
-	// 	       '''
-	// 	      sh" cd ${WORKSPACE}/CloudPortal && mvn clean test -Dtestng.File=${WORKSPACE}/CloudPortal/XMLFilesRefApp/testng_kyma_multitenant.xml  -DonboardingScenarioPortalURL=${params.LandscapeURL} -Dorg.freemarker.loggerLibrary=none -DonboardingScenarioPortalusername=$USERNAME -DonboardingScenarioPortalPass=$PASSWORD -DsubAccountName=${params.Subaccount}" 
+		dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, 'puserpwd':puserpwd], dockerImage: 'engsrvval.int.repositories.cloud.sap/testrunner:latest' ) {
+	      stage('UI Test') {
+		   withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+			//build job: 'risk-manage-cls-Runtime'
+		      sh '''
+			  if [ -d "CloudPortal" ]
+			  then
+			    rm -rf CloudPortal
+			  fi 
+			git clone --single-branch --branch "us10" "https://11a1e1192fe5096b335b2b4c1201d43cb35bd93d@github.tools.sap/BTP-E2EScenarioValidation/CloudPortal.git"  
+		       '''
+		      sh" cd ${WORKSPACE}/CloudPortal && mvn clean test -Dtestng.File=${WORKSPACE}/CloudPortal/XMLFilesRefApp/testng_kyma_multitenant.xml  -DonboardingScenarioPortalURL=${params.LandscapeURL} -Dorg.freemarker.loggerLibrary=none -DonboardingScenarioPortalusername=$USERNAME -DonboardingScenarioPortalPass=$PASSWORD -DsubAccountName=${params.Subaccount}" 
 
 		
-	// 	}
-	//    }
-	// }
+		}
+	   }
+	}
 		stage('Unsubscribe Application')
 		{	
 
-        //   withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+          withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
 				
-        //           unsubscribeFromSaaS(
-        //             script: this,
-        //             btpCredentialsId: params.credentialsId,
-        //             btpGlobalAccountId: params.btpGlobalAccountId,
-        //             saasApplicationName: params.saasApplicationName,
-		// 			btpLandscape: params.btpLandscape,
-        //             btpRegion: params.btpRegion,
-        //             saasSubscribtionPlan: 'default',
-        //             btpSubdomainName: params.Subscriber1Subdomain,
-		// 			saasDefaultPlanRequired: true, 
-		// 		   pollWaitSeconds: 10 
-        //           )
+                  unsubscribeFromSaaS(
+                    script: this,
+                    btpCredentialsId: params.credentialsId,
+                    btpGlobalAccountId: params.btpGlobalAccountId,
+                    saasApplicationName: params.saasApplicationName,
+					btpLandscape: params.btpLandscape,
+                    btpRegion: params.btpRegion,
+                    saasSubscribtionPlan: 'default',
+                    btpSubdomainName: params.Subscriber1Subdomain,
+					saasDefaultPlanRequired: true, 
+				   pollWaitSeconds: 10 
+                  )
                 
 
 
-		// }
+		}
 		}
 				stage('Undeploy Apps')
 	{
-//         node ('windowskymanode') 
-// {
-//     deleteDir()
+        node ('master') 
+{
+    deleteDir()
 
-//               withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
-//               {
+              withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
+              {
 
-//          withKubeConfig([credentialsId: 'kubeconfiglmit']) 
-// {
+         withKubeConfig([credentialsId: 'kubeconfiglmit']) 
+{
 			
-//                         sh '''
-//                         git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
-// 				mv ./kyma-multitenant-extension/* ./
-// 				git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
-// 				mv ./btp-kyma-multitenant-extension/* ./
-//                           kubectl version
-// 						   sleep 1m
-//                           kubectl config view
-//                           pwd
-// 						  chmod +x ./kyma-un-deployment.sh
-// 						  ./kyma-un-deployment.sh
+                        sh '''
+                        git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
+				mv ./kyma-multitenant-extension/* ./
+				git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
+				mv ./btp-kyma-multitenant-extension/* ./
+				curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 --output jq
+					    chmod +x jq
+					    mv jq /usr/local/bin/jq		
 
-//                         '''   
+						curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+                        chmod +x kubectl
+                        mv ./kubectl /usr/local/bin/kubectl	
+
+                        kubectl version --client
+						   sleep 1m
+                          
+						  chmod +x ./kyma-un-deployment.sh
+						  ./kyma-un-deployment.sh
+
+                        '''   
               
           
-// }
-// }  
-// }
+}
+}  
+}
           
 		 }	
 		}
