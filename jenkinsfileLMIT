@@ -121,7 +121,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 		
 		dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, 'puserpwd':puserpwd], dockerImage: 'engsrvval.int.repositories.cloud.sap/testrunner:latest' ) {
 	      stage('UI Test') {
-		   withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:param.credentialsId, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+		   withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
 			//build job: 'risk-manage-cls-Runtime'
 		      sh '''
 			  if [ -d "CloudPortal" ]
