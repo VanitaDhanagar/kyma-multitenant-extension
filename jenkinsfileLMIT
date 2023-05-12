@@ -33,34 +33,34 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 		stage ('Git-clone') 
 			{
 				deleteDir()
-                checkout scm
-				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
-				sh'''
-				git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
-				mv ./kyma-multitenant-extension/* ./
-                git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
-				mv ./btp-kyma-multitenant-extension/* ./
-				'''
-				echo params.LandscapeURL
-				echo params.subaccount
+                // checkout scm
+				// withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'GithubTools',usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+				// sh'''
+				// git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
+				// mv ./kyma-multitenant-extension/* ./
+                // git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
+				// mv ./btp-kyma-multitenant-extension/* ./
+				// '''
+				// echo params.LandscapeURL
+				// echo params.subaccount
 
-				}
+				// }
 
 			}
 			stage ('check_Subaccount_exist') 
 			{
-				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+				// withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
            
-				    checkSubaccount(
-							btpCredentialsId: params.credentialsId,
-							btpGlobalAccountId: params.btpGlobalAccountId,
-							btpSubdomainName: params.btpSubdomainName,
-							btpLandscape: params.btpLandscape,
-							btpRegion: params.btpRegion,
-							command: 'list accounts/subaccount'
-					)
+				//     checkSubaccount(
+				// 			btpCredentialsId: params.credentialsId,
+				// 			btpGlobalAccountId: params.btpGlobalAccountId,
+				// 			btpSubdomainName: params.btpSubdomainName,
+				// 			btpLandscape: params.btpLandscape,
+				// 			btpRegion: params.btpRegion,
+				// 			command: 'list accounts/subaccount'
+				// 	)
 
-				}
+				// }
 				  
 			}
 			stage('Application deployment')
@@ -87,7 +87,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 				        chmod +x kubectl
                         mkdir -p ~/.local/bin
                         mv ./kubectl ~/.local/bin/kubectl
-                        kubectl config view 
+                        kubectl version --client
 						chmod +x ./btpsa-deployment.sh
                         ./btpsa-deployment.sh
                         '''   
