@@ -135,7 +135,9 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
                 //       btpRegion: params.btpRegion,
 				// 	  btpLandscape: params.btpLandscape,
                 //       roleCollection: 'Easy Franchise Backend (kymacrossconsumption-e530d087)',
-				// 	  role:'Backend'
+				// 	  role: 'backend',
+				// 	  appID: ''
+					  
                 //   )
                 
 
@@ -166,18 +168,18 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 
           withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
 				
-                  unsubscribeFromSaaS(
-                    script: this,
-                    btpCredentialsId: params.credentialsId,
-                    btpGlobalAccountId: params.btpGlobalAccountId,
-                    saasApplicationName: params.saasApplicationName,
-					btpLandscape: params.btpLandscape,
-                    btpRegion: params.btpRegion,
-                    saasSubscribtionPlan: 'default',
-                    btpSubdomainName: params.Subscriber1Subdomain,
-					saasDefaultPlanRequired: true, 
-				   pollWaitSeconds: 10 
-                  )
+                //   unsubscribeFromSaaS(
+                //     script: this,
+                //     btpCredentialsId: params.credentialsId,
+                //     btpGlobalAccountId: params.btpGlobalAccountId,
+                //     saasApplicationName: params.saasApplicationName,
+				// 	btpLandscape: params.btpLandscape,
+                //     btpRegion: params.btpRegion,
+                //     saasSubscribtionPlan: 'default',
+                //     btpSubdomainName: params.Subscriber1Subdomain,
+				// 	saasDefaultPlanRequired: true, 
+				//    pollWaitSeconds: 10 
+                //   )
                 
 
 
@@ -195,26 +197,26 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
          withKubeConfig([credentialsId: 'kubeconfiglmit']) 
 {
 			
-                        sh '''
-                        git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
-				mv ./kyma-multitenant-extension/* ./
-				git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
-				mv ./btp-kyma-multitenant-extension/* ./
-				curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 --output jq
-					    chmod +x jq
-					    mv jq /usr/local/bin/jq		
+                //         sh '''
+                //         git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
+				// mv ./kyma-multitenant-extension/* ./
+				// git clone https://github.com/SAP-samples/btp-kyma-multitenant-extension.git --branch 'main'
+				// mv ./btp-kyma-multitenant-extension/* ./
+				// curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 --output jq
+				// 	    chmod +x jq
+				// 	    mv jq /usr/local/bin/jq		
 
-						curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-                        chmod +x kubectl
-                        mv ./kubectl /usr/local/bin/kubectl	
+				// 		curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+                //         chmod +x kubectl
+                //         mv ./kubectl /usr/local/bin/kubectl	
 
-                        kubectl version --client
-						   sleep 1m
+                //         kubectl version --client
+				// 		   sleep 1m
                           
-						  chmod +x ./kyma-un-deployment.sh
-						  ./kyma-un-deployment.sh
+				// 		  chmod +x ./kyma-un-deployment.sh
+				// 		  ./kyma-un-deployment.sh
 
-                        '''   
+                //         '''   
               
           
 }
