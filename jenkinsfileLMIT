@@ -116,29 +116,29 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 		{
 			   withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
 				
-                  subscribeToSaaS(
-				   btpCredentialsId: params.credentialsId,
-				   btpGlobalAccountId: params.btpGlobalAccountId, 
-				   btpSubdomainName: params.Subscriber1Subdomain, 
-				   btpRegion: params.btpRegion, 
-				   btpLandscape: params.btpLandscape, 
-				   saasApplicationName: params.saasApplicationName, 
-				   saasSubscribtionPlan: 'default',
-				   saasDefaultPlanRequired: true, 
-				   pollWaitSeconds: 10 )
-				   sleep 60;
+                //   subscribeToSaaS(
+				//    btpCredentialsId: params.credentialsId,
+				//    btpGlobalAccountId: params.btpGlobalAccountId, 
+				//    btpSubdomainName: params.Subscriber1Subdomain, 
+				//    btpRegion: params.btpRegion, 
+				//    btpLandscape: params.btpLandscape, 
+				//    saasApplicationName: params.saasApplicationName, 
+				//    saasSubscribtionPlan: 'default',
+				//    saasDefaultPlanRequired: true, 
+				//    pollWaitSeconds: 10 )
+				//    sleep 60;
 				
-				// assignRoleToUser(
-                //       btpCredentialsId: params.credentialsId,
-                //       btpGlobalAccountId: params.btpGlobalAccountId,
-                //       btpSubdomainName: params.Subscriber1Subdomain,
-                //       btpRegion: params.btpRegion,
-				// 	  btpLandscape: params.btpLandscape,
-                //       roleCollection: 'Easy Franchise Backend (kymacrossconsumption-e530d087)',
-				// 	  role: 'backend',
-				// 	  appID: ''
+				assignRoleToUser(
+                      btpCredentialsId: params.credentialsId,
+                      btpGlobalAccountId: params.btpGlobalAccountId,
+                      btpSubdomainName: params.Subscriber1Subdomain,
+                      btpRegion: params.btpRegion,
+					  btpLandscape: params.btpLandscape,
+                      roleCollection: 'Easy Franchise Backend (kymacrossconsumption-e530d087)',
+					  role: 'backend',
+					  appID: 'easyfranchise!b65636'
 					  
-                //   )
+                  )
                 
 
 
