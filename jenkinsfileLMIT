@@ -135,7 +135,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
                       btpRegion: params.btpRegion,
 					  btpLandscape: params.btpLandscape,
                       roleCollection: 'Easy Franchise Backend (kymacrossconsumption-e530d087)',
-					  role: 'backend',
+					  role: 'Backend',
 					  appID: 'easyfranchise!b65636'
 					  
                   )
