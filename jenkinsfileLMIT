@@ -75,14 +75,32 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 			{
 				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
 
-						  executeBtpCliCommand(
+			def environmentList = executeBtpCliCommand(
                             btpCredentialsId: params.credentialsId,
 							btpGlobalAccountId: params.btpGlobalAccountId,
 							btpSubdomainName: params.btpSubdomainName,
 							btpLandscape: params.btpLandscape,
 							btpRegion: params.btpRegion,
-							command: 'list accounts/subaccount'
-                            )		
+							command: 'list accounts/subscription'
+                            )	
+			environmentCount = sh (
+    script: """#!/bin/bash -xe
+        echo \"${environmentList}\" | grep -E '${params.saasApplicationName}' | sed -n 1p | wc -l
+    """,
+    returnStdout: true
+  ).trim()
+
+  if (environmentCount.toInteger() > 0) {
+    sh """
+        echo 'saasApplicationName already exists'
+    """
+    return true
+  } else {
+    sh """
+        echo 'saasApplicationName does not exists'
+    """
+    return false
+  }	
 								
 				}
 
