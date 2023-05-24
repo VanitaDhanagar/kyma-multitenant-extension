@@ -68,32 +68,15 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 							btpRegion: params.btpRegion,
 							command: 'list accounts/subaccount'
 					)
-	 def subscriptionList = executeBtpCliCommand(
+	 executeBtpCliCommand(
         btpCredentialsId: params.btpCredentialsId,
         btpGlobalAccountId: params.btpGlobalAccountId,
         btpSubdomainName: params.btpSubdomainName,
         btpRegion:params.btpRegion,
         btpLandscape: params.btpLandscape,
-        command: "list accounts/subscription ",
+        command: "list accounts/subaccount"
     )
-	  subaccountCount = sh (
-    script: """#!/bin/bash -xe
-        set +x
-        echo \"${subscriptionList}\" | grep -E '${params.saasApplicationName} +${btpRegion}' | sed -n 1p | wc -l
-    """,
-    returnStdout: true
-  ).trim()
-   if (subaccountCount.toInteger() > 0) {
-    sh """
-        echo 'Application exists'
-    """
-    return true
-  } else {
-    sh """
-        echo 'Application does not exists'
-    """
-    return false
-  }
+	  
 
 				}
 				  
