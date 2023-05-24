@@ -74,10 +74,8 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
         btpSubdomainName: params.btpSubdomainName,
         btpRegion:params.btpRegion,
         btpLandscape: params.btpLandscape,
-        command: "list accounts/subscription --from-app  ${params.saasApplicationName} --plan default",
+        command: "list accounts/subscription ",
         pollCommand: "--format json get accounts/subscription --of-app  ${params.saasApplicationName} --plan default",
-        pollExpectSuccessText: 'FAILED',
-        pollAttempts: 90
     )
 
 				}
