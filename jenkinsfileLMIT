@@ -68,6 +68,18 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 							btpRegion: params.btpRegion,
 							command: 'list accounts/subaccount'
 					)
+	executeBtpCliCommand(
+        btpCredentialsId: params.btpCredentialsId,
+        btpGlobalAccountId: params.btpGlobalAccountId,
+        btpSubdomainName: params.btpSubdomainName,
+        btpRegion:params.btpRegion,
+        btpLandscape: params.btpLandscape,
+        command: "list accounts/subscription --from-app  ${config.saasApplicationName} ${plan}",
+        pollCommand: "--format json get accounts/subscription --of-app  ${config.saasApplicationName} ${plan}",
+        pollExpectSuccessText: 'NOT_SUBSCRIBED',
+        pollExpectFailureText: 'SUBSCRIBED',
+        pollAttempts: 90
+    )
 
 				}
 				  
@@ -83,6 +95,10 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
               {
 		withKubeConfig([credentialsId: 'kubeconfiglmit']) 
 {
+	         executeBtpCliCommand(
+
+				
+			 )
              
                        sh '''
 						 git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
@@ -97,7 +113,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 						curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
                         chmod +x kubectl
                         mv ./kubectl /usr/local/bin/kubectl	
-
+                        
                         kubectl version --client
 
 						chmod +x ./btpsa-deployment.sh
