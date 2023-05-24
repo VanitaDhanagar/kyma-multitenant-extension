@@ -68,18 +68,24 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 							btpRegion: params.btpRegion,
 							command: 'list accounts/subaccount'
 					)
-	 executeBtpCliCommand(
-        btpCredentialsId: params.btpCredentialsId,
-        btpGlobalAccountId: params.btpGlobalAccountId,
-        btpSubdomainName: params.btpSubdomainName,
-        btpRegion:params.btpRegion,
-        btpLandscape: params.btpLandscape,
-        command: "list accounts/subaccount"
-    )
-	  
-
 				}
 				  
+			}
+			stage ("execute bto cli cmmand")
+			{
+				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+
+						  executeBtpCliCommand(
+                            btpCredentialsId: params.credentialsId,
+							btpGlobalAccountId: params.btpGlobalAccountId,
+							btpSubdomainName: params.btpSubdomainName,
+							btpLandscape: params.btpLandscape,
+							btpRegion: params.btpRegion,
+							command: 'list accounts/subaccount'
+                            )		
+								
+				}
+
 			}
 
     stage('Application deployment')
@@ -92,10 +98,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
               {
 		withKubeConfig([credentialsId: 'kubeconfiglmit']) 
 {
-	         executeBtpCliCommand(
-
-				
-			 )
+	        
              
                        sh '''
 						 git clone https://github.com/VanitaDhanagar/kyma-multitenant-extension.git --branch 'main'
