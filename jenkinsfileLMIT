@@ -72,6 +72,26 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 				}
 				  
 			}
+			stage('Subscribe Application')
+		{
+			   withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+				
+                  subscribeToSaaS(
+				   btpCredentialsId: params.credentialsId,
+				   btpGlobalAccountId: params.btpGlobalAccountId, 
+				   btpSubdomainName: params.Subscriber1Subdomain, 
+				   btpRegion: params.btpRegion, 
+				   btpLandscape: params.btpLandscape, 
+				   saasApplicationName: params.saasApplicationName, 
+				   saasSubscribtionPlan: 'default',
+				   saasDefaultPlanRequired: true, 
+				   pollWaitSeconds: 10 )
+				   sleep 60;
+                
+
+
+		}
+		}
     stage('Application deployment')
 	{
 		node ('master') 
