@@ -72,7 +72,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 				}
 				  
 			}
-			stage('Application deployment')
+    stage('Application deployment')
 	{
 		node ('master') 
        {	
