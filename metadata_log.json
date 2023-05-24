@@ -78,7 +78,6 @@
           "memory": 30,
           "serviceStopped": false,
           "storage": 120,
-          "systempassword": "mySAP123",
           "vcpu": 2,
           "versionIndicator": "",
           "whitelistIPs": [

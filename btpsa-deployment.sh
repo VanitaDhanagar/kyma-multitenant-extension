@@ -94,9 +94,9 @@ echo ""
   kubectl label namespace frontend istio-injection=enabled --overwrite || true
   echo
 
-  log "Step 2.2 - DB Secret: "
-  cat ./code/easyfranchise/deployment/k8s/db-secret.yaml | sed "s~<db-sqlendpoint>~$DB_SQLENDPOINT~g" | sed "s~<db-admin>~$DB_ADMIN~g" | sed "s~<db-admin-password>~$DB_ADMIN_PASSWORD~g" | kubectl apply -f - || true
-  echo
+  # log "Step 2.2 - DB Secret: "
+  # cat ./code/easyfranchise/deployment/k8s/db-secret.yaml | sed "s~<db-sqlendpoint>~$DB_SQLENDPOINT~g" | sed "s~<db-admin>~$DB_ADMIN~g" | sed "s~<db-admin-password>~$DB_ADMIN_PASSWORD~g" | kubectl apply -f - || true
+  # echo
 
   log "Step 2.3 - Backend Configmap"
   kubectl apply -n backend -f ./code/easyfranchise/deployment/k8s/backend-configmap.yaml
