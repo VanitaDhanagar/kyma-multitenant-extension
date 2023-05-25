@@ -95,7 +95,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
             btpGlobalAccountId: params.btpGlobalAccountId,
             saasApplicationName: splitedvalues[0],
             saasSubscribtionPlan: splitedvalues[2],
-            btpSubdomainName: params.btpSubdomainName,
+            btpSubdomainName: params.Subscriber1Subdomain,
             btpRegion: params.btpRegion,
             btpLandscape: params.btpLandscape
         )
