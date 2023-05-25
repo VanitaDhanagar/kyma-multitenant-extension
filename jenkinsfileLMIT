@@ -56,44 +56,36 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 				}
 
 			}
-			
-			stage (" bto cli cmmand")
+			stage ('check_Subaccount_exist') 
 			{
-		withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
-
-	 def subscriptionList = executeBtpCliCommand(
-      btpCredentialsId: params.btpCredentialsId,
-      btpGlobalAccountId: params.btpGlobalAccountId,
-      btpSubdomainName: params.Subscriber1Subdomain,
-      btpRegion: params.btpRegion,
-      btpLandscape: params.btpLandscape,
-      command: 'list accounts/subscription'
-  )
-  subscriptionsCount = sh(script:'''echo "'''+subscriptionList+'''" |  grep -w 'SUBSCRIBED' | wc -l''', returnStdout: true).trim()
-  if (subscriptionsCount.toInteger() > 0) {
-    subscriptions = sh(script:'''echo "'''+subscriptionList+'''" |  grep -w 'SUBSCRIBED' ''', returnStdout: true).trim()
-    subsubscribedList = subscriptions.split('\n') as List
-    subsubscribedList.each { val ->
-        splitedvalues = val.split(' ') as List
-        splitedvalues.removeAll(Arrays.asList('', null))
-        unsubscribeFromSaaS(
-            btpCredentialsId: params.btpCredentialsId,
-            btpGlobalAccountId: params.btpGlobalAccountId,
-            saasApplicationName: params.saasApplicationName,
-            saasSubscribtionPlan: 'default',
-            btpSubdomainName: params.Subscriber1Subdomain,
-            btpRegion: params.btpRegion,
-            btpLandscape: params.btpLandscape
-        )
-    }
-								
+				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+           
+				    checkSubaccount(
+							btpCredentialsId: params.credentialsId,
+							btpGlobalAccountId: params.btpGlobalAccountId,
+							btpSubdomainName: params.btpSubdomainName,
+							btpLandscape: params.btpLandscape,
+							btpRegion: params.btpRegion,
+							command: 'list accounts/subaccount'
+					)
 				}
-				else
-				{
-					sh ''' echo 'SaaS App does not exists' '''
-				}
-
+				  
 			}
+			stage ("execute bto cli cmmand")
+			{
+				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+
+			def saasappList = executeBtpCliCommand(
+                            btpCredentialsId: params.credentialsId,
+							btpGlobalAccountId: params.btpGlobalAccountId,
+							btpSubdomainName: params.btpSubdomainName,
+							btpLandscape: params.btpLandscape,
+							btpRegion: params.btpRegion,
+							command: 'list accounts/subscription'
+                            )	
+				
+				}
+
 			}
 
     stage('Application deployment')
