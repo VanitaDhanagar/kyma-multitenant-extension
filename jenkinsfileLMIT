@@ -81,26 +81,12 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 							btpSubdomainName: params.btpSubdomainName,
 							btpLandscape: params.btpLandscape,
 							btpRegion: params.btpRegion,
-							command: 'list accounts/subscription'
+                            pollCommand: "get accounts/subscription --of-app  ${params.saasApplicationName} --plan default",
+                            pollExpectSuccessText: 'NOT_SUBSCRIBED',
+                            pollExpectFailureText: 'SUBSCRIBED',
+                            pollAttempts: 90
                             )	
-			environmentCount = sh (
-    script: """#!/bin/bash -xe
-        echo \"${environmentList}\" | grep -E '${params.saasApplicationName}' | sed -n 1p | wc -l
-    """,
-    returnStdout: true
-  ).trim()
-
-  if (environmentCount.toInteger() > 0) {
-    sh """
-        echo 'saasApplicationName already exists'
-    """
-    return true
-  } else {
-    sh """
-        echo 'saasApplicationName does not exists'
-    """
-    return false
-  }	
+		
 								
 				}
 
