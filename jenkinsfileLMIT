@@ -86,20 +86,20 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 				  subscriptionsCount = sh(script:'''echo "'''+subscriptionList+'''" |  grep -w 'SUBSCRIBED' | wc -l''', returnStdout: true).trim()
                      if (subscriptionsCount.toInteger() > 0) {
     subscriptions = sh(script:'''echo "'''+subscriptionList+'''" |  grep -w 'SUBSCRIBED' ''', returnStdout: true).trim()
-    subsubscribedList = subscriptions.split('\n') as List
-    subsubscribedList.each { val ->
-        splitedvalues = val.split(' ') as List
-        splitedvalues.removeAll(Arrays.asList('', null))
-        unsubscribeFromSaaS(
-            btpCredentialsId: params.btpCredentialsId,
-            btpGlobalAccountId: params.btpGlobalAccountId,
-            saasApplicationName: splitedvalues[0],
-            saasSubscribtionPlan: splitedvalues[2],
-            btpSubdomainName: params.Subscriber1Subdomain,
-            btpRegion: params.btpRegion,
-            btpLandscape: params.btpLandscape
-        )
-    }
+    
+         unsubscribeFromSaaS(
+                    script: this,
+                    btpCredentialsId: params.credentialsId,
+                    btpGlobalAccountId: params.btpGlobalAccountId,
+                    saasApplicationName: params.saasApplicationName,
+					btpLandscape: params.btpLandscape,
+                    btpRegion: params.btpRegion,
+                    saasSubscribtionPlan: 'default',
+                    btpSubdomainName: params.Subscriber1Subdomain,
+					saasDefaultPlanRequired: true, 
+				   pollWaitSeconds: 10 
+                  )
+    
   }
 				
 				}
