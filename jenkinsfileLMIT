@@ -93,8 +93,8 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
         unsubscribeFromSaaS(
             btpCredentialsId: params.btpCredentialsId,
             btpGlobalAccountId: params.btpGlobalAccountId,
-            saasApplicationName: params.Subscriber1Subdomain,
-            saasSubscribtionPlan: 'default',
+            saasApplicationName: splitedvalues[0],
+            saasSubscribtionPlan: splitedvalues[2],
             btpSubdomainName: params.btpSubdomainName,
             btpRegion: params.btpRegion,
             btpLandscape: params.btpLandscape
