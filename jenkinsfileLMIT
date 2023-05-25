@@ -75,7 +75,7 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 			{
 				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
 
-			def saasappList = executeBtpCliCommand(
+			def subscriptionList = executeBtpCliCommand(
                             btpCredentialsId: params.credentialsId,
 							btpGlobalAccountId: params.btpGlobalAccountId,
 							btpSubdomainName: params.btpSubdomainName,
