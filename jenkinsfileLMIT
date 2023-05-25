@@ -59,9 +59,9 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 			
 			stage (" bto cli cmmand")
 			{
-				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+		withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:params.credentialsId,usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
 
-			 subscriptionList = executeBtpCliCommand(
+	 def subscriptionList = executeBtpCliCommand(
       btpCredentialsId: params.btpCredentialsId,
       btpGlobalAccountId: params.btpGlobalAccountId,
       btpSubdomainName: params.Subscriber1Subdomain,
