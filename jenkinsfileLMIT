@@ -78,13 +78,29 @@ dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, '
 			def subscriptionList = executeBtpCliCommand(
                             btpCredentialsId: params.credentialsId,
 							btpGlobalAccountId: params.btpGlobalAccountId,
-							btpSubdomainName: params.btpSubdomainName,
+							btpSubdomainName: params.Subscriber1Subdomain,
 							btpLandscape: params.btpLandscape,
 							btpRegion: params.btpRegion,
 							command: 'list accounts/subscription'
                             )	
 				  subscriptionsCount = sh(script:'''echo "'''+subscriptionList+'''" |  grep -w 'SUBSCRIBED' | wc -l''', returnStdout: true).trim()
-
+                     if (subscriptionsCount.toInteger() > 0) {
+    subscriptions = sh(script:'''echo "'''+subscriptionList+'''" |  grep -w 'SUBSCRIBED' ''', returnStdout: true).trim()
+    subsubscribedList = subscriptions.split('\n') as List
+    subsubscribedList.each { val ->
+        splitedvalues = val.split(' ') as List
+        splitedvalues.removeAll(Arrays.asList('', null))
+        unsubscribeFromSaaS(
+            btpCredentialsId: params.btpCredentialsId,
+            btpGlobalAccountId: params.btpGlobalAccountId,
+            saasApplicationName: params.Subscriber1Subdomain,
+            saasSubscribtionPlan: 'default',
+            btpSubdomainName: params.btpSubdomainName,
+            btpRegion: params.btpRegion,
+            btpLandscape: params.btpLandscape
+        )
+    }
+  }
 				
 				}
 
